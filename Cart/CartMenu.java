@@ -15,6 +15,7 @@ public class CartMenu {
         int pilihMenu;
 
         do{
+            System.out.println("\n === KERANJANG SUPERMARKET === ");
             System.out.println("1. Tambah barang ke keranjang");
             System.out.println("2. Update jumlah barang");
             System.out.println("3. Hapus barang dari keranjang");
@@ -25,7 +26,7 @@ public class CartMenu {
             pilihMenu = input.nextInt();
             input.nextLine();
 
-            switch(pilihMenu){
+            switch (pilihMenu){
                 case 1 : tambahKeranjang(); break;
                 case 2 : updateJumlah(); break;
                 case 3 : hapusKeranjang(); break;
@@ -34,29 +35,28 @@ public class CartMenu {
 
             }
         } while (pilihMenu != 6);
-
     }
 
     private void tambahKeranjang() {
-        System.out.print("Nama barang: ");
+        System.out.print("Nama barang : ");
         String nama = input.next();
-        System.out.print("Harga barang: ");
+        System.out.print("Harga barang : ");
         int harga = input.nextInt();
-        System.out.print("Jumlah: ");
+        System.out.print("Jumlah : ");
         int jumlah = input.nextInt();
 
         cart.add(new CartItem(nama, harga, jumlah));
-        System.out.println("Barang ditambahkan ke keranjang!");
+        System.out.println("Barang '" + nama + "' ditambahkan ke keranjang!");
     }
 
     private void updateJumlah() {
         tampilKeranjang();
 
-        System.out.print("Pilih nomor barang: ");
+        System.out.print("Pilih nomor barang : ");
         int idx = input.nextInt() - 1;
 
         if (idx >= 0 && idx < cart.size()) {
-            System.out.print("Jumlah baru: ");
+            System.out.print("Jumlah baru : ");
             int jumlah = input.nextInt();
             cart.get(idx).setJumlah(jumlah);
             System.out.println("Jumlah berhasil diperbarui!");
@@ -68,7 +68,7 @@ public class CartMenu {
     private void hapusKeranjang() {
         tampilKeranjang();
 
-        System.out.print("Pilih nomor barang untuk dihapus: ");
+        System.out.print("Pilih nomor barang untuk dihapus : ");
         int idx = input.nextInt() - 1;
 
         if (idx >= 0 && idx < cart.size()) {
@@ -89,8 +89,8 @@ public class CartMenu {
         for (int i = 0; i < cart.size(); i++) {
             CartItem item = cart.get(i);
             System.out.println((i + 1) + ". " + item.getNama() +
-                    " | Harga: " + item.getHarga() +
-                    " | Jumlah: " + item.getJumlah());
+                    " | Harga : " + item.getHarga() +
+                    " | Jumlah : " + item.getJumlah());
         }
     }
 
