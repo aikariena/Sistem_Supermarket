@@ -32,8 +32,8 @@ public class CartMenu {
                 case 3 : hapusKeranjang(); break;
                 case 4 : tampilKeranjang(); break;
                 case 5 : hitungSubtotal(); break;
-
             }
+
         } while (pilihMenu != 6);
     }
 
@@ -101,6 +101,6 @@ public class CartMenu {
             total += item.getHarga() * item.getJumlah();
         }
 
-        System.out.println("Subtotal: " + total);
+        System.out.println("Subtotal : " + total);
     }
 }
