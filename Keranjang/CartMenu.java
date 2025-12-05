@@ -38,18 +38,29 @@ public class CartMenu {
     }
 
     private void tambahKeranjang() {
+        System.out.print("ID Barang : ");
+        int idBarang = input.nextInt();
+        input.nextLine();
+
         System.out.print("Nama barang : ");
-        String nama = input.next();
+        String nama = input.nextLine();
+
         System.out.print("Harga barang : ");
         int harga = input.nextInt();
+
         System.out.print("Jumlah : ");
         int jumlah = input.nextInt();
 
-        cart.add(new CartItem(nama, harga, jumlah));
+        cart.add(new CartItem(idBarang, nama, harga, jumlah));
         System.out.println("Barang '" + nama + "' ditambahkan ke keranjang!");
     }
 
     private void updateJumlah() {
+        if(cart.isEmpty()){
+            System.out.println("Keranjang masih kosong.");
+            return;
+        }
+
         tampilKeranjang();
 
         System.out.print("Pilih nomor barang : ");
@@ -66,6 +77,11 @@ public class CartMenu {
     }
 
     private void hapusKeranjang() {
+        if(cart.isEmpty()){
+            System.out.println("Keranjang masih kosong.");
+            return;
+        }
+        
         tampilKeranjang();
 
         System.out.print("Pilih nomor barang untuk dihapus : ");
