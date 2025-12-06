@@ -1,12 +1,8 @@
-// File ini berisi 'public static void main'
-// Berfungsi sebagai antarmuka (UI) konsol untuk pengguna
-
 import java.util.Scanner;
 
 public class SistemGudang {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        // Kita memanggil class Gudang yang ada di file sebelah (Gudang.java)
         Gudang gudang = new Gudang();
         int pilihan = 0;
 
@@ -23,7 +19,7 @@ public class SistemGudang {
             
             try {
                 pilihan = scanner.nextInt();
-                scanner.nextLine(); // membersihkan buffer
+                scanner.nextLine();
             } catch (Exception e) {
                 System.out.println("Input harus angka!");
                 scanner.nextLine();
@@ -39,7 +35,7 @@ public class SistemGudang {
 
                 case 2:
                     System.out.print("Masukkan ID Barang: ");
-                    String idBarang = scanner.nextLine(); // Variabel lokal juga diubah agar konsisten
+                    String idBarang = scanner.nextLine();
                     System.out.print("Masukkan Nama Barang: ");
                     String nama = scanner.nextLine();
                     System.out.print("Masukkan Harga: ");
@@ -90,4 +86,5 @@ public class SistemGudang {
 
         scanner.close();
     }
+
 }
