@@ -51,7 +51,6 @@ public class CartMenu {
         }
     }
 
-    // Menu utama
     public void ShowMenu() {
         int pilihMenu = 0;
         do {
@@ -64,13 +63,13 @@ public class CartMenu {
             System.out.println("6. Keluar");
             System.out.print("Pilih Menu : ");
             
-            // Handle input non-integer
+
             if (input.hasNextInt()) {
                 pilihMenu = input.nextInt();
                 input.nextLine();
             } else {
                 System.out.println("Input tidak valid. Masukkan angka.");
-                input.nextLine(); // Kosongkan buffer
+                input.nextLine(); 
                 continue;
             }
 
@@ -87,10 +86,9 @@ public class CartMenu {
         } while (pilihMenu != 6);
     }
 
-    // Tambah barang berdasarkan ID dari gudang
     private void tambahKeranjang() {
-        System.out.print("Masukkan ID Barang: ");
-        String id = input.nextLine().toUpperCase(); // Pastikan ID huruf besar/kecilnya sama
+        System.out.print("Masukkan ID Barang : ");
+        String id = input.nextLine().toUpperCase(); 
 
         if (!gudangData.containsKey(id)) {
             System.out.println("❌ ID tidak ditemukan di gudang!");
@@ -99,7 +97,6 @@ public class CartMenu {
 
         String[] data = gudangData.get(id);
         String nama = data[0];
-        // Konversi harga (yang disimpan sebagai String) menjadi int
         int harga = (int) Double.parseDouble(data[1]); 
 
         System.out.print("Jumlah: ");
@@ -240,7 +237,7 @@ public class CartMenu {
             total += (long)item.getHarga() * item.getJumlah(); 
         }
         String totalFormatted = String.format("Rp%,d", total);
-        System.out.println("Total Subtotal: " + totalFormatted);
+        System.out.println("Total Subtotal : " + totalFormatted);
     }
 
     // Save/load keranjang
@@ -251,7 +248,7 @@ public class CartMenu {
                 bw.newLine();
             }
         } catch(IOException e) {
-            System.err.println("❌ Error menyimpan keranjang: "+e.getMessage());
+            System.err.println("❌ Error menyimpan keranjang : "+e.getMessage());
         }
     }
 
