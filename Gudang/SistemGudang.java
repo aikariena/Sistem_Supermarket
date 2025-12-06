@@ -1,3 +1,5 @@
+package Gudang;
+
 import java.util.Scanner;
 
 public class SistemGudang {

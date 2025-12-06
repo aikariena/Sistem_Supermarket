@@ -96,5 +96,4 @@ B095;Baterai ABC Alkaline AA isi 2;12000.0;50
 B096;Baterai ABC Alkaline AAA isi 2;12000.0;50
 B097;Lampu LED Philips 10W;45000.0;30
 B098;Lampu LED Hannochs 10W;35000.0;30
-B099;Korek Api Tokai Gas;2500.0;100
-B100;Lilin Putih Pack Isi 8;6000.0;50
+B099;Korek Api Tokai Gas;2500.0;87

@@ -1,11 +1,14 @@
+package Gudang;
+
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Gudang {
     private LinkedList<Barang> daftarBarang = new LinkedList<>();
-    private final String NAMA_FILE = "database.txt";
+    private final String NAMA_FILE = "Gudang/database.txt";
 
     public Gudang() {
         bacaDataDariFile();
@@ -125,6 +128,10 @@ public class Gudang {
         if (!ditemukan) {
             System.out.println("Barang tidak ditemukan.");
         }
+    }
+
+    public ArrayList<Barang> getSemuaBarang() {
+        return new ArrayList<>(daftarBarang);
     }
 
 }
