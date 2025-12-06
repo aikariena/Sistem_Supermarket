@@ -4,17 +4,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import Gudang.Gudang;
 import Keranjang.CartItem;
-import Pembayaran.PaymentMenu;
+import Keranjang.CartCode;
 
 public class UserMenu {
     private LoginSystem loginSystem;
     private Gudang gudang;
+    private CartCode cartCode;
     private ArrayList<CartItem> cart;
     private Scanner input;
 
     public UserMenu(LoginSystem loginSystem) {
         this.loginSystem = loginSystem;
         this.gudang = new Gudang();
+        this.cartCode = new CartCode();
         this.cart = new ArrayList<>();
         this.input = new Scanner(System.in);
     }
@@ -29,7 +31,7 @@ public class UserMenu {
             System.out.println("╚════════════════════════════════════════════════╝");
             System.out.println("1. Gudang (Browse Produk)");
             System.out.println("2. Keranjang Belanja Saya");
-            System.out.println("3. Bayar (Checkout)");
+            System.out.println("3. Buat Kode Keranjang (untuk Kasir)");
             System.out.println("4. Logout");
             System.out.print("Pilih Menu: ");
             pilih = input.nextInt();
@@ -43,12 +45,7 @@ public class UserMenu {
                     lihatKeranjangSaya();
                     break;
                 case 3:
-                    if (!cart.isEmpty()) {
-                        PaymentMenu paymentMenu = new PaymentMenu(cart, gudang, user.getUsername());
-                        paymentMenu.showPaymentMenu();
-                    } else {
-                        System.out.println("⚠️  Keranjang Anda kosong!");
-                    }
+                    buatKodeKeranjang();
                     break;
                 case 4:
                     System.out.println("Logout berhasil!");
@@ -107,58 +104,102 @@ public class UserMenu {
     }
 
     private void lihatKeranjangSaya() {
+        if (cart.isEmpty()) {
+            System.out.println("\n⚠️  Keranjang Anda kosong!");
+            return;
+        }
+
         System.out.println("\n╔════════════════════════════════════════════════╗");
         System.out.println("║        KERANJANG BELANJA SAYA");
         System.out.println("╚════════════════════════════════════════════════╝");
 
-        if (cart.isEmpty()) {
-            System.out.println("Keranjang kosong.");
-            return;
-        }
-
-        System.out.println("\nRincian Keranjang:");
-        int no = 1;
         double total = 0;
+        System.out.printf("%-5s %-10s %-30s %-10s %-10s %-12s\n",
+            "No", "ID", "Nama", "Harga", "Jumlah", "Subtotal");
+        System.out.println("─".repeat(82));
+
+        int no = 1;
         for (CartItem item : cart) {
-            double subtotal = item.getHarga() * item.getJumlah();
-            total += subtotal;
-            System.out.println(no + ". " + item.getNama() +
-                    " | Harga: Rp " + item.getHarga() +
-                    " | Qty: " + item.getJumlah() +
-                    " | Subtotal: Rp " + String.format("%.0f", subtotal));
-            no++;
+            System.out.printf("%-5d %-10s %-30s Rp%-8.0f %-10d Rp%.0f\n",
+                no++, item.getIdBarang(), item.getNama(),
+                item.getHarga(), item.getJumlah(), item.getSubtotal());
+            total += item.getSubtotal();
         }
 
-        System.out.println("────────────────────────────────────");
-        System.out.printf("TOTAL : Rp %.0f\n", total);
+        System.out.println("─".repeat(82));
+        System.out.printf("TOTAL: Rp%.0f\n", total);
 
-        System.out.println("\nOpsi:");
-        System.out.println("1. Update jumlah");
-        System.out.println("2. Hapus barang");
+        System.out.println("\n1. Hapus item");
+        System.out.println("2. Ubah jumlah item");
         System.out.println("3. Kembali");
         System.out.print("Pilih: ");
         int pilih = input.nextInt();
         input.nextLine();
 
-        if (pilih == 1) {
-            System.out.print("Pilih nomor barang: ");
-            int idx = input.nextInt() - 1;
-            input.nextLine();
-            if (idx >= 0 && idx < cart.size()) {
+        switch (pilih) {
+            case 1:
+                System.out.print("Nomor item yang dihapus: ");
+                int noHapus = input.nextInt();
+                input.nextLine();
+                if (noHapus > 0 && noHapus <= cart.size()) {
+                    cart.remove(noHapus - 1);
+                    System.out.println("✅ Item dihapus!");
+                }
+                break;
+            case 2:
+                System.out.print("Nomor item: ");
+                int noItem = input.nextInt();
                 System.out.print("Jumlah baru: ");
                 int jumlahBaru = input.nextInt();
                 input.nextLine();
-                cart.get(idx).setJumlah(jumlahBaru);
-                System.out.println("✅ Jumlah diperbarui!");
-            }
-        } else if (pilih == 2) {
-            System.out.print("Pilih nomor barang: ");
-            int idx = input.nextInt() - 1;
-            input.nextLine();
-            if (idx >= 0 && idx < cart.size()) {
-                cart.remove(idx);
-                System.out.println("✅ Barang dihapus!");
-            }
+                if (noItem > 0 && noItem <= cart.size()) {
+                    cart.get(noItem - 1).setJumlah(jumlahBaru);
+                    System.out.println("✅ Jumlah item diubah!");
+                }
+                break;
+        }
+    }
+
+    private void buatKodeKeranjang() {
+        if (cart.isEmpty()) {
+            System.out.println("\n⚠️  Keranjang Anda kosong! Tambah barang terlebih dahulu.");
+            return;
+        }
+
+        System.out.println("\n╔════════════════════════════════════════════════╗");
+        System.out.println("║        BUAT KODE KERANJANG");
+        System.out.println("╚════════════════════════════════════════════════╝");
+
+        // Tampilkan isi keranjang
+        double total = 0;
+        System.out.printf("%-5s %-10s %-30s %-10s %-10s %-12s\n",
+            "No", "ID", "Nama", "Harga", "Jumlah", "Subtotal");
+        System.out.println("─".repeat(82));
+
+        int no = 1;
+        for (CartItem item : cart) {
+            System.out.printf("%-5d %-10s %-30s Rp%-8.0f %-10d Rp%.0f\n",
+                no++, item.getIdBarang(), item.getNama(),
+                item.getHarga(), item.getJumlah(), item.getSubtotal());
+            total += item.getSubtotal();
+        }
+
+        System.out.println("─".repeat(82));
+        System.out.printf("TOTAL: Rp%.0f\n", total);
+
+        System.out.print("\nBuat kode keranjang? (y/n): ");
+        String jawab = input.nextLine();
+
+        if (jawab.equalsIgnoreCase("y")) {
+            String kode = cartCode.buatKodeKeranjang(new ArrayList<>(cart));
+            System.out.println("\n✅ Kode keranjang berhasil dibuat!");
+            System.out.println("📝 Kode Anda: " + kode);
+            System.out.println("   Berikan kode ini kepada kasir untuk diproses.");
+            System.out.println("   Keranjang Anda akan dikosongkan.");
+
+            cart.clear();
+        } else {
+            System.out.println("Pembatalan pembuatan kode keranjang.");
         }
     }
 }

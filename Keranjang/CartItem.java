@@ -17,6 +17,7 @@ public class CartItem {
     public int getHarga() { return harga; }
     public int getJumlah() { return jumlah; }
     public String getIdBarang() { return idBarang; }
+    public double getSubtotal() { return harga * jumlah; }
 
     public void setJumlah(int jumlah) { this.jumlah = jumlah; }
 }

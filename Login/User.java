@@ -25,6 +25,9 @@ public class User {
     public String getRole() { return role; }
     public boolean isDefault() { return isDefault; }
 
+    public void setUsername(String username) { this.username = username; }
+    public void setNoTelepon(String noTelepon) { this.noTelepon = noTelepon; }
+
     public String toCSV() {
         return username + ";" + noTelepon + ";" + role + ";" + isDefault;
     }

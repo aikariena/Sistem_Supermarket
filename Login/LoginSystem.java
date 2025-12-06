@@ -111,6 +111,165 @@ public class LoginSystem {
         return true;
     }
 
+    // ===== CRUD ADMIN =====
+    public ArrayList<User> getSemuaAdmin() {
+        ArrayList<User> admins = new ArrayList<>();
+        for (User u : daftarUser) {
+            if (u.getRole().equals("admin")) {
+                admins.add(u);
+            }
+        }
+        return admins;
+    }
+
+    public User cariAdminByUsername(String username) {
+        for (User u : daftarUser) {
+            if (u.getRole().equals("admin") && u.getUsername().equalsIgnoreCase(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean editAdmin(String usernameOld, String usernameNew, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
+            return false;
+        }
+
+        User admin = cariAdminByUsername(usernameOld);
+        if (admin == null) return false;
+
+        // Cek username baru sudah ada atau belum (jika berbeda)
+        if (!usernameNew.equalsIgnoreCase(usernameOld)) {
+            for (User u : daftarUser) {
+                if (u.getUsername().equalsIgnoreCase(usernameNew)) {
+                    return false;
+                }
+            }
+        }
+
+        admin.setUsername(usernameNew);
+        admin.setNoTelepon(noTelepon);
+        simpanDataKeFile();
+        return true;
+    }
+
+    public boolean hapusAdmin(String username) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
+            return false;
+        }
+
+        // Jangan hapus admin default
+        User admin = cariAdminByUsername(username);
+        if (admin != null && admin.isDefault()) {
+            return false;
+        }
+
+        return daftarUser.removeIf(u -> u.getRole().equals("admin") && u.getUsername().equalsIgnoreCase(username));
+    }
+
+    // ===== CRUD KASIR =====
+    public ArrayList<User> getSemuaKasir() {
+        ArrayList<User> kasirs = new ArrayList<>();
+        for (User u : daftarUser) {
+            if (u.getRole().equals("kasir")) {
+                kasirs.add(u);
+            }
+        }
+        return kasirs;
+    }
+
+    public User cariKasirByUsername(String username) {
+        for (User u : daftarUser) {
+            if (u.getRole().equals("kasir") && u.getUsername().equalsIgnoreCase(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean editKasir(String usernameOld, String usernameNew, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
+            return false;
+        }
+
+        User kasir = cariKasirByUsername(usernameOld);
+        if (kasir == null) return false;
+
+        // Cek username baru sudah ada atau belum
+        if (!usernameNew.equalsIgnoreCase(usernameOld)) {
+            for (User u : daftarUser) {
+                if (u.getUsername().equalsIgnoreCase(usernameNew)) {
+                    return false;
+                }
+            }
+        }
+
+        kasir.setUsername(usernameNew);
+        kasir.setNoTelepon(noTelepon);
+        simpanDataKeFile();
+        return true;
+    }
+
+    public boolean hapusKasir(String username) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
+            return false;
+        }
+
+        return daftarUser.removeIf(u -> u.getRole().equals("kasir") && u.getUsername().equalsIgnoreCase(username));
+    }
+
+    // ===== CRUD MEMBER =====
+    public ArrayList<User> getSemuaMember() {
+        ArrayList<User> members = new ArrayList<>();
+        for (User u : daftarUser) {
+            if (u.getRole().equals("pengguna")) {
+                members.add(u);
+            }
+        }
+        return members;
+    }
+
+    public User cariMemberByUsername(String username) {
+        for (User u : daftarUser) {
+            if (u.getRole().equals("pengguna") && u.getUsername().equalsIgnoreCase(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean editMember(String usernameOld, String usernameNew, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
+            return false;
+        }
+
+        User member = cariMemberByUsername(usernameOld);
+        if (member == null) return false;
+
+        // Cek username baru sudah ada atau belum
+        if (!usernameNew.equalsIgnoreCase(usernameOld)) {
+            for (User u : daftarUser) {
+                if (u.getUsername().equalsIgnoreCase(usernameNew)) {
+                    return false;
+                }
+            }
+        }
+
+        member.setUsername(usernameNew);
+        member.setNoTelepon(noTelepon);
+        simpanDataKeFile();
+        return true;
+    }
+
+    public boolean hapusMember(String username) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
+            return false;
+        }
+
+        return daftarUser.removeIf(u -> u.getRole().equals("pengguna") && u.getUsername().equalsIgnoreCase(username));
+    }
+
     public void logout() {
         userLoginSekarang = null;
     }

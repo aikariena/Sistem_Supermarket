@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import Gudang.Gudang;
 import Keranjang.CartItem;
+import Keranjang.CartCode;
 import Pembayaran.PaymentMenu;
 
 public class CashierMenu {
     private LoginSystem loginSystem;
     private Gudang gudang;
-    private ArrayList<CartItem> cart;
+    private CartCode cartCode;
     private Scanner input;
 
     public CashierMenu(LoginSystem loginSystem) {
         this.loginSystem = loginSystem;
         this.gudang = new Gudang();
-        this.cart = new ArrayList<>();
+        this.cartCode = new CartCode();
         this.input = new Scanner(System.in);
     }
 
@@ -51,111 +52,63 @@ public class CashierMenu {
         int pilih;
         do {
             System.out.println("\n╔════════════════════════════════════════════════╗");
-            System.out.println("║        MENU PEMBAYARAN");
+            System.out.println("║        MENU PEMBAYARAN (KASIR)");
             System.out.println("╚════════════════════════════════════════════════╝");
-            System.out.println("1. Input Barang ke Keranjang");
-            System.out.println("2. Lihat Keranjang");
-            System.out.println("3. Hapus Barang dari Keranjang");
-            System.out.println("4. Proses Checkout");
-            System.out.println("5. Kembali");
+            System.out.println("1. Input kode keranjang member");
+            System.out.println("2. Lihat semua kode keranjang");
+            System.out.println("3. Kembali");
             System.out.print("Pilih Menu: ");
             pilih = input.nextInt();
             input.nextLine();
 
             switch (pilih) {
                 case 1:
-                    inputBarangKeKeranjang();
+                    inputKodeKeranjang();
                     break;
                 case 2:
-                    lihatKeranjang();
+                    cartCode.tampilkanSemuaKodeKeranjang();
                     break;
                 case 3:
-                    hapusBarangKeranjang();
-                    break;
-                case 4:
-                    if (!cart.isEmpty()) {
-                        PaymentMenu paymentMenu = new PaymentMenu(cart, gudang, loginSystem.getUserSekarang().getUsername());
-                        paymentMenu.showPaymentMenu();
-                    } else {
-                        System.out.println("⚠️  Keranjang kosong!");
-                    }
-                    break;
-                case 5:
                     return;
                 default:
                     System.out.println("Pilihan tidak valid!");
             }
-        } while (pilih != 5);
+        } while (pilih != 3);
     }
 
-    private void inputBarangKeKeranjang() {
-        System.out.println("\n📦 Cari barang yang ingin ditambahkan:");
-        System.out.print("Cari (ID/Nama): ");
-        String keyword = input.nextLine();
-        
-        gudang.cariBarang(keyword);
-        
-        System.out.print("\nTambahkan ke keranjang? (y/n): ");
-        String jawab = input.nextLine();
-        
-        if (jawab.equalsIgnoreCase("y")) {
-            System.out.print("ID Barang: ");
-            String idBarang = input.nextLine();
-            System.out.print("Nama barang: ");
-            String nama = input.nextLine();
-            System.out.print("Harga barang (Rp): ");
-            int harga = input.nextInt();
-            System.out.print("Jumlah: ");
-            int jumlah = input.nextInt();
-            input.nextLine();
-
-            cart.add(new CartItem(idBarang, nama, harga, jumlah));
-            System.out.println("✅ Barang '" + nama + "' ditambahkan ke keranjang!");
-        }
-    }
-
-    private void lihatKeranjang() {
+    private void inputKodeKeranjang() {
         System.out.println("\n╔════════════════════════════════════════════════╗");
-        System.out.println("║        ISI KERANJANG");
+        System.out.println("║        INPUT KODE KERANJANG");
         System.out.println("╚════════════════════════════════════════════════╝");
-        
-        if (cart.isEmpty()) {
-            System.out.println("Keranjang kosong.");
+        System.out.print("Masukkan kode keranjang member: ");
+        String kodeKeranjang = input.nextLine();
+
+        ArrayList<CartItem> cart = cartCode.getKeranjangByKode(kodeKeranjang);
+        if (cart == null) {
+            System.out.println("❌ Kode keranjang tidak ditemukan!");
             return;
         }
 
-        for (int i = 0; i < cart.size(); i++) {
-            CartItem item = cart.get(i);
-            System.out.println((i + 1) + ". " + item.getNama() +
-                    " | Harga: Rp " + item.getHarga() +
-                    " | Qty: " + item.getJumlah() +
-                    " | ID: " + item.getIdBarang());
-        }
+        // Tampilkan detail keranjang
+        cartCode.tampilkanDetailKeranjang(kodeKeranjang);
 
-        double total = 0;
-        for (CartItem item : cart) {
-            total += item.getHarga() * item.getJumlah();
-        }
-        System.out.println("────────────────────────────────────");
-        System.out.printf("Subtotal : Rp %.0f\n", total);
-    }
+        // Proses pembayaran
+        System.out.print("\nProses pembayaran? (y/n): ");
+        String jawab = input.nextLine();
 
-    private void hapusBarangKeranjang() {
-        if (cart.isEmpty()) {
-            System.out.println("Keranjang kosong.");
-            return;
-        }
+        if (jawab.equalsIgnoreCase("y")) {
+            // Ambil username member dari input (untuk struk)
+            System.out.print("Username member: ");
+            String usernameMember = input.nextLine();
 
-        lihatKeranjang();
-        System.out.print("\nPilih nomor barang untuk dihapus: ");
-        int idx = input.nextInt() - 1;
-        input.nextLine();
+            PaymentMenu paymentMenu = new PaymentMenu(cart, gudang, usernameMember);
+            paymentMenu.showPaymentMenu();
 
-        if (idx >= 0 && idx < cart.size()) {
-            cart.remove(idx);
-            System.out.println("✅ Barang dihapus dari keranjang!");
+            // Hapus keranjang setelah pembayaran selesai
+            cartCode.hapusKeranjang(kodeKeranjang);
+            System.out.println("✅ Kode keranjang telah dihapus dari sistem.");
         } else {
-            System.out.println("Nomor tidak valid!");
+            System.out.println("Pembayaran dibatalkan.");
         }
     }
 }
