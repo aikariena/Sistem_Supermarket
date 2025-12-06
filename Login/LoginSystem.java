@@ -2,19 +2,22 @@ package Login;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class LoginSystem {
-    private ArrayList<User> daftarUser = new ArrayList<>();
+    // Pakai HashMap biar Cepat (Optimasi)
+    private HashMap<String, User> userMap = new HashMap<>();
     private final String NAMA_FILE = "users.txt";
     private User userLoginSekarang = null;
 
     public LoginSystem() {
         bacaDataDariFile();
-        // Jika file kosong, buat admin default
-        if (daftarUser.isEmpty()) {
-            User adminDefault = new User("admin", "0812345678", "admin", true);
-            daftarUser.add(adminDefault);
+        // Buat Default Admin jika file kosong
+        if (userMap.isEmpty()) {
+            // Password admin default: admin123
+            User adminDefault = new User("admin", "admin123", "0812345678", "admin", true);
+            userMap.put("admin", adminDefault);
             simpanDataKeFile();
         }
     }
@@ -28,262 +31,182 @@ public class LoginSystem {
                 String baris = fileScanner.nextLine();
                 String[] data = baris.split(";");
 
-                if (data.length == 4) {
-                    String username = data[0];
-                    String noTelepon = data[1];
-                    String role = data[2];
-                    boolean isDefault = Boolean.parseBoolean(data[3]);
-                    daftarUser.add(new User(username, noTelepon, role, isDefault));
+                // Kita baca 5 kolom sekarang
+                if (data.length == 5) {
+                    String u = data[0];
+                    String p = data[1]; // password
+                    String t = data[2]; // telp
+                    String r = data[3];
+                    boolean d = Boolean.parseBoolean(data[4]);
+                    
+                    User user = new User(u, p, t, r, d);
+                    userMap.put(u.toLowerCase(), user);
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error saat membaca file user: " + e.getMessage());
+            System.out.println("Error baca file: " + e.getMessage());
         }
     }
 
     private void simpanDataKeFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(NAMA_FILE))) {
-            for (User u : daftarUser) {
+            for (User u : userMap.values()) {
                 writer.write(u.toCSV());
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error saat menyimpan user: " + e.getMessage());
+            System.out.println("Error simpan file: " + e.getMessage());
         }
     }
 
-    public boolean login(String username, String noTelepon) {
-        for (User u : daftarUser) {
-            if (u.getUsername().equalsIgnoreCase(username) && u.getNoTelepon().equals(noTelepon)) {
-                userLoginSekarang = u;
-                return true;
+    // === LOGIC LOGIN YANG DIMINTA ===
+    // Parameter kedua namanya 'credential' karena bisa berisi Password atau NoTelp
+    public boolean login(String username, String credential) {
+        String key = username.toLowerCase();
+        
+        if (userMap.containsKey(key)) {
+            User u = userMap.get(key);
+            
+            // ADMIN & KASIR -> Cek Password
+            if (u.getRole().equals("admin") || u.getRole().equals("kasir")) {
+                if (u.getPassword().equals(credential)) {
+                    userLoginSekarang = u;
+                    return true;
+                }
+            } 
+            // USER PEMBELI -> Cek No Telepon
+            else if (u.getRole().equals("pengguna")) {
+                if (u.getNoTelepon().equals(credential)) {
+                    userLoginSekarang = u;
+                    return true;
+                }
             }
         }
         return false;
     }
 
     public boolean register(String username, String noTelepon) {
-        // Pengguna (user) bisa registrasi sendiri
-        for (User u : daftarUser) {
-            if (u.getUsername().equalsIgnoreCase(username)) {
-                return false; // Username sudah ada
-            }
-        }
-        User userBaru = new User(username, noTelepon, "pengguna");
-        daftarUser.add(userBaru);
+        if (userMap.containsKey(username.toLowerCase())) return false;
+
+        // User passwordnya "-"
+        User userBaru = new User(username, "-", noTelepon, "pengguna", false);
+        userMap.put(username.toLowerCase(), userBaru);
         simpanDataKeFile();
         
-        // Inisialisasi saldo untuk member baru
         MemberBalance mb = new MemberBalance();
         mb.initSaldoMember(username);
+        return true;
+    }
+
+    // Tambah Admin (Wajib Password)
+    public boolean tambahAdmin(String username, String password, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
+        if (userMap.containsKey(username.toLowerCase())) return false;
         
-        return true;
-    }
-
-    public boolean tambahAdmin(String username, String noTelepon) {
-        // Hanya admin yang bisa menambah admin baru
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
-
-        for (User u : daftarUser) {
-            if (u.getUsername().equalsIgnoreCase(username)) {
-                return false; // Username sudah ada
-            }
-        }
-
-        User adminBaru = new User(username, noTelepon, "admin");
-        daftarUser.add(adminBaru);
+        User adminBaru = new User(username, password, noTelepon, "admin", false);
+        userMap.put(username.toLowerCase(), adminBaru);
         simpanDataKeFile();
         return true;
     }
 
-    public boolean tambahKasir(String username, String noTelepon) {
-        // Hanya admin yang bisa menambah kasir
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
+    // Tambah Kasir (Wajib Password)
+    public boolean tambahKasir(String username, String password, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
+        if (userMap.containsKey(username.toLowerCase())) return false;
 
-        for (User u : daftarUser) {
-            if (u.getUsername().equalsIgnoreCase(username)) {
-                return false; // Username sudah ada
-            }
-        }
-
-        User kasirBaru = new User(username, noTelepon, "kasir");
-        daftarUser.add(kasirBaru);
+        User kasirBaru = new User(username, password, noTelepon, "kasir", false);
+        userMap.put(username.toLowerCase(), kasirBaru);
         simpanDataKeFile();
         return true;
     }
 
-    // ===== CRUD ADMIN =====
+    // --- Method Helper untuk AdminMenu (NAMA VARIABLE TETAP SAMA) ---
     public ArrayList<User> getSemuaAdmin() {
-        ArrayList<User> admins = new ArrayList<>();
-        for (User u : daftarUser) {
-            if (u.getRole().equals("admin")) {
-                admins.add(u);
-            }
-        }
-        return admins;
+        ArrayList<User> list = new ArrayList<>();
+        for(User u : userMap.values()) if(u.getRole().equals("admin")) list.add(u);
+        return list;
     }
-
-    public User cariAdminByUsername(String username) {
-        for (User u : daftarUser) {
-            if (u.getRole().equals("admin") && u.getUsername().equalsIgnoreCase(username)) {
-                return u;
-            }
-        }
-        return null;
-    }
-
-    public boolean editAdmin(String usernameOld, String usernameNew, String noTelepon) {
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
-
-        User admin = cariAdminByUsername(usernameOld);
-        if (admin == null) return false;
-
-        // Cek username baru sudah ada atau belum (jika berbeda)
-        if (!usernameNew.equalsIgnoreCase(usernameOld)) {
-            for (User u : daftarUser) {
-                if (u.getUsername().equalsIgnoreCase(usernameNew)) {
-                    return false;
-                }
-            }
-        }
-
-        admin.setUsername(usernameNew);
-        admin.setNoTelepon(noTelepon);
-        simpanDataKeFile();
-        return true;
-    }
-
-    public boolean hapusAdmin(String username) {
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
-
-        // Jangan hapus admin default
-        User admin = cariAdminByUsername(username);
-        if (admin != null && admin.isDefault()) {
-            return false;
-        }
-
-        return daftarUser.removeIf(u -> u.getRole().equals("admin") && u.getUsername().equalsIgnoreCase(username));
-    }
-
-    // ===== CRUD KASIR =====
     public ArrayList<User> getSemuaKasir() {
-        ArrayList<User> kasirs = new ArrayList<>();
-        for (User u : daftarUser) {
-            if (u.getRole().equals("kasir")) {
-                kasirs.add(u);
-            }
-        }
-        return kasirs;
+        ArrayList<User> list = new ArrayList<>();
+        for(User u : userMap.values()) if(u.getRole().equals("kasir")) list.add(u);
+        return list;
     }
-
-    public User cariKasirByUsername(String username) {
-        for (User u : daftarUser) {
-            if (u.getRole().equals("kasir") && u.getUsername().equalsIgnoreCase(username)) {
-                return u;
-            }
-        }
-        return null;
-    }
-
-    public boolean editKasir(String usernameOld, String usernameNew, String noTelepon) {
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
-
-        User kasir = cariKasirByUsername(usernameOld);
-        if (kasir == null) return false;
-
-        // Cek username baru sudah ada atau belum
-        if (!usernameNew.equalsIgnoreCase(usernameOld)) {
-            for (User u : daftarUser) {
-                if (u.getUsername().equalsIgnoreCase(usernameNew)) {
-                    return false;
-                }
-            }
-        }
-
-        kasir.setUsername(usernameNew);
-        kasir.setNoTelepon(noTelepon);
-        simpanDataKeFile();
-        return true;
-    }
-
-    public boolean hapusKasir(String username) {
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
-
-        return daftarUser.removeIf(u -> u.getRole().equals("kasir") && u.getUsername().equalsIgnoreCase(username));
-    }
-
-    // ===== CRUD MEMBER =====
     public ArrayList<User> getSemuaMember() {
-        ArrayList<User> members = new ArrayList<>();
-        for (User u : daftarUser) {
-            if (u.getRole().equals("pengguna")) {
-                members.add(u);
-            }
-        }
-        return members;
+        ArrayList<User> list = new ArrayList<>();
+        for(User u : userMap.values()) if(u.getRole().equals("pengguna")) list.add(u);
+        return list;
     }
 
-    public User cariMemberByUsername(String username) {
-        for (User u : daftarUser) {
-            if (u.getRole().equals("pengguna") && u.getUsername().equalsIgnoreCase(username)) {
-                return u;
-            }
+    public User cariAdminByUsername(String u) { return userMap.get(u.toLowerCase()); }
+    public User cariKasirByUsername(String u) { return userMap.get(u.toLowerCase()); }
+    public User cariMemberByUsername(String u) { return userMap.get(u.toLowerCase()); }
+
+    // Edit dengan support Password baru
+    public boolean editAdmin(String usernameOld, String usernameNew, String passwordNew, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
+        String oldKey = usernameOld.toLowerCase();
+        String newKey = usernameNew.toLowerCase();
+        
+        if (!userMap.containsKey(oldKey)) return false;
+        User u = userMap.get(oldKey);
+
+        if (!oldKey.equals(newKey)) {
+            if (userMap.containsKey(newKey)) return false;
+            userMap.remove(oldKey);
+            u.setUsername(usernameNew);
+            userMap.put(newKey, u);
         }
-        return null;
-    }
-
-    public boolean editMember(String usernameOld, String usernameNew, String noTelepon) {
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
-        }
-
-        User member = cariMemberByUsername(usernameOld);
-        if (member == null) return false;
-
-        // Cek username baru sudah ada atau belum
-        if (!usernameNew.equalsIgnoreCase(usernameOld)) {
-            for (User u : daftarUser) {
-                if (u.getUsername().equalsIgnoreCase(usernameNew)) {
-                    return false;
-                }
-            }
-        }
-
-        member.setUsername(usernameNew);
-        member.setNoTelepon(noTelepon);
+        
+        // Update data
+        u.setPassword(passwordNew);
+        u.setNoTelepon(noTelepon);
         simpanDataKeFile();
         return true;
     }
 
-    public boolean hapusMember(String username) {
-        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) {
-            return false;
+    public boolean editKasir(String usernameOld, String usernameNew, String passwordNew, String noTelepon) {
+        // Sama dengan admin logic
+        return editAdmin(usernameOld, usernameNew, passwordNew, noTelepon);
+    }
+    
+    // Edit Member (Tidak ubah password)
+    public boolean editMember(String usernameOld, String usernameNew, String noTelepon) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
+        String oldKey = usernameOld.toLowerCase();
+        String newKey = usernameNew.toLowerCase();
+        
+        if (!userMap.containsKey(oldKey)) return false;
+        User u = userMap.get(oldKey);
+
+        if (!oldKey.equals(newKey)) {
+            if (userMap.containsKey(newKey)) return false;
+            userMap.remove(oldKey);
+            u.setUsername(usernameNew);
+            userMap.put(newKey, u);
         }
-
-        return daftarUser.removeIf(u -> u.getRole().equals("pengguna") && u.getUsername().equalsIgnoreCase(username));
+        u.setNoTelepon(noTelepon);
+        simpanDataKeFile();
+        return true;
     }
 
-    public void logout() {
-        userLoginSekarang = null;
+    public boolean hapusUser(String username) {
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
+        String key = username.toLowerCase();
+        User u = userMap.get(key);
+        
+        if(u != null && !u.isDefault()) {
+            userMap.remove(key);
+            simpanDataKeFile();
+            return true;
+        }
+        return false;
     }
+    // Wrapper method agar AdminMenu tidak error
+    public boolean hapusAdmin(String u) { return hapusUser(u); }
+    public boolean hapusKasir(String u) { return hapusUser(u); }
+    public boolean hapusMember(String u) { return hapusUser(u); }
 
-    public User getUserSekarang() {
-        return userLoginSekarang;
-    }
-
-    public boolean isLogin() {
-        return userLoginSekarang != null;
-    }
+    public void logout() { userLoginSekarang = null; }
+    public User getUserSekarang() { return userLoginSekarang; }
+    public boolean isLogin() { return userLoginSekarang != null; }
 }
