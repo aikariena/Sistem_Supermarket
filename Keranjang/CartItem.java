@@ -54,7 +54,7 @@ public class CartItem {
             try {
                 String id = parts[0];
                 String nama = parts[1];
-                int harga = Integer.parseInt(parts[2]);
+                int harga = (int) Double.parseDouble(parts[2]);
                 int jumlah = Integer.parseInt(parts[3]);
                 return new CartItem(id, nama, harga, jumlah);
             } catch (NumberFormatException e) {
