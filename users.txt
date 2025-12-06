@@ -3,3 +3,5 @@ kemal;08985626060;pengguna;false
 aika;081234321;kasir;false
 akmal;12345678;admin;false
 kemalz;0987654321;pengguna;false
+adit;0821;pengguna;false
+faiz;0987;pengguna;false
