@@ -1,10 +1,10 @@
 public class CartItem {
-    private int idBarang;
+    private String idBarang;
     private String nama;
     private int harga;
     private int jumlah;
 
-    public CartItem(int idBarang, String nama, int harga, int jumlah) {
+    public CartItem(String idBarang, String nama, int harga, int jumlah) {
         this.idBarang = idBarang;
         this.nama = nama;
         this.harga = harga;
@@ -14,6 +14,7 @@ public class CartItem {
     public String getNama() { return nama; }
     public int getHarga() { return harga; }
     public int getJumlah() { return jumlah; }
+    public String getIdBarang() { return idBarang; }
 
     public void setJumlah(int jumlah) { this.jumlah = jumlah; }
 }

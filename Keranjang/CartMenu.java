@@ -39,8 +39,7 @@ public class CartMenu {
 
     private void tambahKeranjang() {
         System.out.print("ID Barang : ");
-        int idBarang = input.nextInt();
-        input.nextLine();
+        String idBarang = input.nextLine();
 
         System.out.print("Nama barang : ");
         String nama = input.nextLine();
@@ -106,7 +105,8 @@ public class CartMenu {
             CartItem item = cart.get(i);
             System.out.println((i + 1) + ". " + item.getNama() +
                     " | Harga : " + item.getHarga() +
-                    " | Jumlah : " + item.getJumlah());
+                    " | Jumlah : " + item.getJumlah() +
+                    " | ID barang : " + item.getIdBarang());
         }
     }
 
