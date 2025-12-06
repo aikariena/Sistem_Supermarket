@@ -11,32 +11,50 @@ public class CartItem {
         this.jumlah = jumlah;
     }
 
-    public String getIdBarang() { return idBarang; }
-    public String getNama() { return nama; }
-    public int getHarga() { return harga; }
-    public int getJumlah() { return jumlah; }
+    // Getters
+    public String getIdBarang() {
+        return idBarang;
+    }
 
-    public void setJumlah(int jumlah) { this.jumlah = jumlah; }
+    public String getNama() {
+        return nama;
+    }
 
+    public int getHarga() {
+        return harga;
+    }
+
+    public int getJumlah() {
+        return jumlah;
+    }
+
+    // Setter untuk jumlah
+    public void setJumlah(int jumlah) {
+        this.jumlah = jumlah;
+    }
+
+    // Konversi ke String untuk penyimpanan (ID|Nama|Harga|Jumlah)
     @Override
     public String toString() {
-        return idBarang + "|" + nama + "|" + harga + "|" + jumlah;
+        return idBarang + ";" + nama + ";" + harga + ";" + jumlah;
     }
 
-    public static CartItem fromString(String line){
-        try {
-        String[] parts = line.split("\\|");
-        if (parts.length != 4) return null;
-
-        String id = parts[0].trim();
-        String nama = parts[1].trim();
-        int harga = Integer.parseInt(parts[2].trim());
-        int jumlah = Integer.parseInt(parts[3].trim());
-
-        return new CartItem(id, nama, harga, jumlah);
-
-    } catch (Exception e) {
-        return null; // kalau error langsung skip
-    }
+    // Metode statis untuk membuat objek dari String yang dimuat
+    public static CartItem fromString(String line) {
+        // Karena data gudang mungkin tidak konsisten, kita hanya mengandalkan 4 bagian
+        String[] parts = line.split(";");
+        if (parts.length == 4) {
+            try {
+                String id = parts[0];
+                String nama = parts[1];
+                int harga = Integer.parseInt(parts[2]);
+                int jumlah = Integer.parseInt(parts[3]);
+                return new CartItem(id, nama, harga, jumlah);
+            } catch (NumberFormatException e) {
+                // System.err.println("Error parsing data keranjang: " + line);
+                return null;
+            }
+        }
+        return null;
     }
 }
