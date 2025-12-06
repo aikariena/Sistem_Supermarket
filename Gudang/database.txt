@@ -7,8 +7,8 @@ B006;Gula Pasir Gulaku 1kg;14500.0;200
 B007;Gula Pasir Curah 1kg;13000.0;150
 B008;Tepung Terigu Segitiga Biru 1kg;12000.0;120
 B009;Tepung Terigu Kunci Biru 1kg;11500.0;100
-B010;Telur Ayam Negeri 1kg;28000.0;30
-B011;Garam Dapur Refina 500g;5000.0;150
+B010;Telur Ayam Negeri 1kg;28000.0;10
+B011;Garam Dapur Refina 500g;5000.0;148
 B012;Garam Bata Yodium;2000.0;200
 B013;Susu Kental Manis Frisian Flag;11000.0;100
 B014;Susu Kental Manis Indomilk;10500.0;95
@@ -29,7 +29,7 @@ B028;Saus Sambal ABC 335ml;15000.0;70
 B029;Saus Sambal Indofood 335ml;14500.0;75
 B030;Santan Kara 65ml;3500.0;300
 B031;Teh Celup Sariwangi isi 25;6500.0;100
-B032;Teh Celup Sosro isi 30;6000.0;90
+B032;Teh Celup Sosro isi 30;6000.0;80
 B033;Kopi Kapal Api Special 165g;13000.0;80
 B034;Kopi Luwak White Coffee 10s;14000.0;85
 B035;Kopi Nescafe Classic 100g;35000.0;40
@@ -96,4 +96,4 @@ B095;Baterai ABC Alkaline AA isi 2;12000.0;50
 B096;Baterai ABC Alkaline AAA isi 2;12000.0;50
 B097;Lampu LED Philips 10W;45000.0;30
 B098;Lampu LED Hannochs 10W;35000.0;30
-B099;Korek Api Tokai Gas;2500.0;87
+B099;Korek Api Tokai Gas;2500.0;86

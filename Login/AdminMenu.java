@@ -3,6 +3,7 @@ package Login;
 import java.util.ArrayList;
 import java.util.Scanner;
 import Gudang.Gudang;
+import Pembayaran.LaporanPenjualan; // NEW IMPORT
 
 public class AdminMenu {
     private LoginSystem loginSystem;
@@ -48,7 +49,7 @@ public class AdminMenu {
                     break;
                 case 5:
                     lihatLaporan();
-                    break;
+                    break; // MODIFIED: Dihapus break, tapi diganti dengan fungsi baru
                 case 6:
                     System.out.println("Logout berhasil!");
                     loginSystem.logout();
@@ -519,11 +520,13 @@ public class AdminMenu {
         System.out.println("\n╔════════════════════════════════════════════════╗");
         System.out.println("║        LAPORAN PENJUALAN");
         System.out.println("╚════════════════════════════════════════════════╝");
-        System.out.println("📊 Fitur laporan masih dalam pengembangan.");
-        System.out.println("   Nantinya akan menampilkan:");
-        System.out.println("   - Total penjualan");
-        System.out.println("   - Barang terlaris");
-        System.out.println("   - Laporan per periode");
+        
+        System.out.println("Fitur ini menampilkan laporan penjualan harian.");
+        System.out.print("Masukkan tanggal laporan (DD/MM/YYYY): ");
+        String tanggal = input.nextLine();
+        
+        // Memanggil fungsi Laporan Penjualan baru
+        LaporanPenjualan laporan = new LaporanPenjualan();
+        laporan.generateLaporanHarian(tanggal);
     }
 }
-
