@@ -11,6 +11,11 @@ public class CartItem {
         this.jumlah = jumlah;
     }
 
+    public double getSubtotal() {
+    // Menggunakan double untuk total agar sesuai dengan tipe data yang digunakan di CartCode (Rp%.0f)
+    return (double) this.harga * this.jumlah; 
+}
+
     // Getters
     public String getIdBarang() {
         return idBarang;

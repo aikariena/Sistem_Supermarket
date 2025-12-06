@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class CartCode {
+    
     private HashMap<String, ArrayList<CartItem>> cartDatabase = new HashMap<>();
     private final String NAMA_FILE = "Keranjang/cart_codes.txt";
 
@@ -14,40 +15,46 @@ public class CartCode {
     }
 
     private void bacaDataDariFile() {
-        File file = new File(NAMA_FILE);
-        if (!file.exists()) return;
+    File file = new File(NAMA_FILE);
+    if (!file.exists()) return;
 
-        try (Scanner fileScanner = new Scanner(file)) {
-            while (fileScanner.hasNextLine()) {
-                String baris = fileScanner.nextLine();
-                String[] data = baris.split("\\|");
+    try (Scanner fileScanner = new Scanner(file)) {
+        while (fileScanner.hasNextLine()) {
+            String baris = fileScanner.nextLine();
+            String[] data = baris.split("\\|");
+            
+            if (data.length >= 1) {
+                String kodeKeranjang = data[0];
+                ArrayList<CartItem> items = new ArrayList<>();
                 
-                if (data.length >= 1) {
-                    String kodeKeranjang = data[0];
-                    ArrayList<CartItem> items = new ArrayList<>();
+                // Parse items dari kode keranjang
+                for (int i = 1; i < data.length; i++) {
+                    String[] itemData = data[i].split(";");
                     
-                    // Parse items dari kode keranjang
-                    for (int i = 1; i < data.length; i++) {
-                        String[] itemData = data[i].split(";");
-                        if (itemData.length == 4) {
-                            String idBarang = itemData[0];
-                            String nama = itemData[1];
-                            int harga = Integer.parseInt(itemData[2]);
-                            int jumlah = Integer.parseInt(itemData[3]);
-                            
-                            items.add(new CartItem(idBarang, nama, harga, jumlah));
-                        }
-                    }
-                    
-                    if (!items.isEmpty()) {
-                        cartDatabase.put(kodeKeranjang, items);
-                    }
+                    // Struktur IF yang benar
+                    if (itemData.length == 4) { 
+                        String idBarang = itemData[0];
+                        String nama = itemData[1];
+                        
+                        // Perbaikan konversi harga (Double -> Int)
+                        int harga = (int) Double.parseDouble(itemData[2]); 
+                        
+                        int jumlah = Integer.parseInt(itemData[3]);
+                        
+                        items.add(new CartItem(idBarang, nama, harga, jumlah));
+                    } // <-- Kurung kurawal penutup IF
+                } // <-- Kurung kurawal penutup FOR
+                
+                if (!items.isEmpty()) {
+                    cartDatabase.put(kodeKeranjang, items);
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Error saat membaca cart codes: " + e.getMessage());
         }
+
+    } catch (Exception e) {
+        System.out.println("Error saat membaca cart codes: " + e.getMessage());
     }
+}
 
     private void simpanDataKeFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(NAMA_FILE))) {
