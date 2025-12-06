@@ -1,0 +1,100 @@
+B001;Beras Pandan Wangi 5kg;65000.0;50
+B002;Beras Rojolele 5kg;62000.0;45
+B003;Minyak Goreng Bimoli 2L;38000.0;100
+B004;Minyak Goreng Sania 2L;37500.0;90
+B005;Minyak Goreng Filma 2L;38500.0;85
+B006;Gula Pasir Gulaku 1kg;14500.0;200
+B007;Gula Pasir Curah 1kg;13000.0;150
+B008;Tepung Terigu Segitiga Biru 1kg;12000.0;120
+B009;Tepung Terigu Kunci Biru 1kg;11500.0;100
+B010;Telur Ayam Negeri 1kg;28000.0;30
+B011;Garam Dapur Refina 500g;5000.0;150
+B012;Garam Bata Yodium;2000.0;200
+B013;Susu Kental Manis Frisian Flag;11000.0;100
+B014;Susu Kental Manis Indomilk;10500.0;95
+B015;Susu UHT Ultra Milk 1L;18000.0;60
+B016;Susu UHT Greenfields 1L;21000.0;50
+B017;Indomie Goreng Original;3500.0;500
+B018;Indomie Soto Mie;3200.0;450
+B019;Indomie Ayam Bawang;3200.0;400
+B020;Indomie Kari Ayam;3500.0;400
+B021;Mie Sedap Goreng;3500.0;450
+B022;Sari Roti Tawar Spesial;15000.0;20
+B023;Sari Roti Tawar Gandum;18000.0;15
+B024;Margarin Blueband 200g;9500.0;80
+B025;Margarin Simas 200g;7000.0;70
+B026;Kecap Manis Bango 550ml;24000.0;60
+B027;Kecap Manis ABC 520ml;22000.0;65
+B028;Saus Sambal ABC 335ml;15000.0;70
+B029;Saus Sambal Indofood 335ml;14500.0;75
+B030;Santan Kara 65ml;3500.0;300
+B031;Teh Celup Sariwangi isi 25;6500.0;100
+B032;Teh Celup Sosro isi 30;6000.0;90
+B033;Kopi Kapal Api Special 165g;13000.0;80
+B034;Kopi Luwak White Coffee 10s;14000.0;85
+B035;Kopi Nescafe Classic 100g;35000.0;40
+B036;Air Mineral Aqua 1.5L;6000.0;120
+B037;Air Mineral Le Minerale 1.5L;5500.0;110
+B038;Air Mineral Vit 1.5L;5000.0;100
+B039;Teh Pucuk Harum 350ml;4000.0;150
+B040;Teh Botol Sosro 450ml;6500.0;100
+B041;Coca Cola 1.5L;15000.0;50
+B042;Sprite 1.5L;15000.0;45
+B043;Fanta Strawberry 1.5L;15000.0;45
+B044;Buavita Jus Jeruk 250ml;8000.0;60
+B045;Buavita Jus Apel 250ml;8000.0;60
+B046;Floridina Orange 350ml;3500.0;100
+B047;Minute Maid Pulpy 300ml;5000.0;80
+B048;Chitato Sapi Panggang 68g;10500.0;70
+B049;Lays Rumput Laut 68g;10500.0;70
+B050;Qtela Singkong Balado;6000.0;80
+B051;Oreo Vanilla 133g;8500.0;90
+B052;Oreo Coklat 133g;8500.0;85
+B053;Good Time Chocochips;7500.0;80
+B054;Beng Beng Wafer Chocolate;2500.0;200
+B055;Top Wafer Chocolate;1500.0;200
+B056;Silverqueen Chunky Bar;22000.0;50
+B057;Cadbury Dairy Milk 62g;16000.0;50
+B058;Roti O Donuts;3000.0;30
+B059;Ayam Utuh Beku 1kg;35000.0;15
+B060;Nugget Fiesta 500g;45000.0;20
+B061;Nugget Champ 500g;38000.0;25
+B062;Sosis So Nice Sapi 10s;18000.0;30
+B063;Sosis Kimbo Sapi 12s;25000.0;25
+B064;Bakso Sapi Sumber Selera;30000.0;20
+B065;Deterjen Rinso Anti Noda 800g;22000.0;60
+B066;Deterjen Attack Jazz 1 800g;19000.0;55
+B067;Deterjen Daia Bunga 850g;16000.0;60
+B068;Pewangi Molto Blue 800ml;25000.0;40
+B069;Pewangi Downy Mystique 720ml;30000.0;40
+B070;Sabun Mandi Lifebuoy Cair 450ml;20000.0;50
+B071;Sabun Mandi Nuvo Cair 450ml;18000.0;50
+B072;Sabun Mandi Lux Cair 450ml;22000.0;45
+B073;Shampo Sunsilk Hitam 170ml;21000.0;40
+B074;Shampo Pantene Hairfall 160ml;23000.0;40
+B075;Shampo Clear Men 160ml;24000.0;35
+B076;Shampo Head & Shoulders 160ml;24000.0;35
+B077;Pasta Gigi Pepsodent 190g;13000.0;80
+B078;Pasta Gigi Ciptadent 190g;9000.0;80
+B079;Sikat Gigi Formula Pack 3;12000.0;60
+B080;Sabun Cuci Piring Sunlight 755ml;15000.0;70
+B081;Sabun Cuci Piring Mama Lemon 780ml;14000.0;70
+B082;Pembersih Lantai Super Pell 770ml;13000.0;60
+B083;Pembersih Lantai So Klin 770ml;12000.0;60
+B084;Pembersih Kaca Cling 425ml;9000.0;50
+B085;Vixal Pembersih Toilet 780ml;16000.0;40
+B086;Baygon Semprot Nyamuk 600ml;35000.0;30
+B087;Hit Semprot Nyamuk 600ml;32000.0;30
+B088;Tisu Wajah Paseo 250 sheet;12000.0;100
+B089;Tisu Wajah Nice 250 sheet;11000.0;100
+B090;Tisu Gulung Tessa;4000.0;80
+B091;Popok MamyPoko L30;65000.0;20
+B092;Popok Merries L30;70000.0;20
+B093;Pembalut Charm Body Fit;8000.0;60
+B094;Pembalut Laurier Active;9000.0;60
+B095;Baterai ABC Alkaline AA isi 2;12000.0;50
+B096;Baterai ABC Alkaline AAA isi 2;12000.0;50
+B097;Lampu LED Philips 10W;45000.0;30
+B098;Lampu LED Hannochs 10W;35000.0;30
+B099;Korek Api Tokai Gas;2500.0;100
+B100;Lilin Putih Pack Isi 8;6000.0;50
