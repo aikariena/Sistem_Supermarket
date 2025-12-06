@@ -20,9 +20,8 @@ public class Barang {
     public void setHarga(double harga) { this.harga = harga; }
     public void setStok(int stok) { this.stok = stok; }
 
-    // Method baru: Mengubah data objek menjadi format teks dengan pemisah titik koma
-    // Contoh output: "B001;Indomie Goreng;3500.0;50"
     public String toCSV() {
         return idBarang + ";" + nama + ";" + harga + ";" + stok;
     }
+
 }
