@@ -88,7 +88,7 @@ B087;Hit Semprot Nyamuk 600ml;32000.0;30
 B088;Tisu Wajah Paseo 250 sheet;12000.0;100
 B089;Tisu Wajah Nice 250 sheet;11000.0;100
 B090;Tisu Gulung Tessa;4000.0;80
-B091;Popok MamyPoko L30;65000.0;20
+B091;Popok MamyPoko L30;65000.0;19
 B092;Popok Merries L30;70000.0;20
 B093;Pembalut Charm Body Fit;8000.0;60
 B094;Pembalut Laurier Active;9000.0;60
