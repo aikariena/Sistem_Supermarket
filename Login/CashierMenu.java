@@ -10,13 +10,13 @@ import Pembayaran.PaymentMenu;
 public class CashierMenu {
     private LoginSystem loginSystem;
     private Gudang gudang;
-    private CartCode cartCode;
+    private CartCode cartCode; // Ini objek penghubung ke file temanmu
     private Scanner input;
 
     public CashierMenu(LoginSystem loginSystem) {
         this.loginSystem = loginSystem;
         this.gudang = new Gudang();
-        this.cartCode = new CartCode();
+        this.cartCode = new CartCode(); // Load data dari file temanmu
         this.input = new Scanner(System.in);
     }
 
@@ -66,7 +66,8 @@ public class CashierMenu {
                     inputKodeKeranjang();
                     break;
                 case 2:
-                    CartCode.tampilkanSemuaKodeKeranjang();
+                    // Panggil lewat variabel cartCode (bukan Class CartCode)
+                    cartCode.tampilkanSemuaKodeKeranjang();
                     break;
                 case 3:
                     return;
@@ -83,29 +84,29 @@ public class CashierMenu {
         System.out.print("Masukkan kode keranjang member: ");
         String kodeKeranjang = input.nextLine();
 
-        ArrayList<CartItem> cart = CartCode.getKeranjangByKode(kodeKeranjang);
+        // Panggil lewat variabel cartCode
+        ArrayList<CartItem> cart = cartCode.getKeranjangByKode(kodeKeranjang);
         if (cart == null) {
             System.out.println("❌ Kode keranjang tidak ditemukan!");
             return;
         }
 
-        // Tampilkan detail keranjang
-        CartCode.tampilkanDetailKeranjang(kodeKeranjang);
+        // Tampilkan detail
+        cartCode.tampilkanDetailKeranjang(kodeKeranjang);
 
-        // Proses pembayaran
         System.out.print("\nProses pembayaran? (y/n): ");
         String jawab = input.nextLine();
 
         if (jawab.equalsIgnoreCase("y")) {
-            // Ambil username member dari input (untuk struk)
             System.out.print("Username member: ");
             String usernameMember = input.nextLine();
 
             User kasir = loginSystem.getUserSekarang();
+            // Masuk ke menu pembayaran Aika
             PaymentMenu paymentMenu = new PaymentMenu(cart, gudang, usernameMember, kasir.getUsername());
             paymentMenu.showPaymentMenu();
 
-            // Hapus keranjang setelah pembayaran selesai
+            // Hapus keranjang setelah lunas
             cartCode.hapusKeranjang(kodeKeranjang);
             System.out.println("✅ Kode keranjang telah dihapus dari sistem.");
         } else {

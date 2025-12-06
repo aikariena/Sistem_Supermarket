@@ -15,7 +15,6 @@ public class LoginSystem {
         bacaDataDariFile();
         // Buat Default Admin jika file kosong
         if (userMap.isEmpty()) {
-            // Password admin default: admin123
             User adminDefault = new User("admin", "admin123", "0812345678", "admin", true);
             userMap.put("admin", adminDefault);
             simpanDataKeFile();
@@ -29,18 +28,20 @@ public class LoginSystem {
         try (Scanner fileScanner = new Scanner(file)) {
             while (fileScanner.hasNextLine()) {
                 String baris = fileScanner.nextLine();
+                if (baris.trim().isEmpty()) continue;
                 String[] data = baris.split(";");
 
-                // Kita baca 5 kolom sekarang
                 if (data.length == 5) {
-                    String u = data[0];
-                    String p = data[1]; // password
-                    String t = data[2]; // telp
-                    String r = data[3];
-                    boolean d = Boolean.parseBoolean(data[4]);
+                    String u = data[0].trim();
+                    String p = data[1].trim(); 
+                    String t = data[2].trim(); 
+                    String r = data[3].trim();
+                    boolean d = Boolean.parseBoolean(data[4].trim());
                     
-                    User user = new User(u, p, t, r, d);
-                    userMap.put(u.toLowerCase(), user);
+                    if (!u.isEmpty()) {
+                        User user = new User(u, p, t, r, d);
+                        userMap.put(u.toLowerCase(), user);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -59,8 +60,7 @@ public class LoginSystem {
         }
     }
 
-    // === LOGIC LOGIN YANG DIMINTA ===
-    // Parameter kedua namanya 'credential' karena bisa berisi Password atau NoTelp
+    // === LOGIC LOGIN ===
     public boolean login(String username, String credential) {
         String key = username.toLowerCase();
         
@@ -88,7 +88,6 @@ public class LoginSystem {
     public boolean register(String username, String noTelepon) {
         if (userMap.containsKey(username.toLowerCase())) return false;
 
-        // User passwordnya "-"
         User userBaru = new User(username, "-", noTelepon, "pengguna", false);
         userMap.put(username.toLowerCase(), userBaru);
         simpanDataKeFile();
@@ -98,7 +97,6 @@ public class LoginSystem {
         return true;
     }
 
-    // Tambah Admin (Wajib Password)
     public boolean tambahAdmin(String username, String password, String noTelepon) {
         if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
         if (userMap.containsKey(username.toLowerCase())) return false;
@@ -109,7 +107,6 @@ public class LoginSystem {
         return true;
     }
 
-    // Tambah Kasir (Wajib Password)
     public boolean tambahKasir(String username, String password, String noTelepon) {
         if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
         if (userMap.containsKey(username.toLowerCase())) return false;
@@ -120,7 +117,7 @@ public class LoginSystem {
         return true;
     }
 
-    // --- Method Helper untuk AdminMenu (NAMA VARIABLE TETAP SAMA) ---
+    // --- HELPER METHODS ---
     public ArrayList<User> getSemuaAdmin() {
         ArrayList<User> list = new ArrayList<>();
         for(User u : userMap.values()) if(u.getRole().equals("admin")) list.add(u);
@@ -138,10 +135,10 @@ public class LoginSystem {
     }
 
     public User cariAdminByUsername(String u) { return userMap.get(u.toLowerCase()); }
-    public User cariKasirByUsername(String u) { return userMap.get(u.toLowerCase()); }
+    public User cariKasirByUsername(String u) { return userMap.get(u.toLowerCase()); } 
     public User cariMemberByUsername(String u) { return userMap.get(u.toLowerCase()); }
 
-    // Edit dengan support Password baru
+    // EDIT ADMIN
     public boolean editAdmin(String usernameOld, String usernameNew, String passwordNew, String noTelepon) {
         if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
         String oldKey = usernameOld.toLowerCase();
@@ -149,6 +146,8 @@ public class LoginSystem {
         
         if (!userMap.containsKey(oldKey)) return false;
         User u = userMap.get(oldKey);
+        
+        if (!u.getRole().equals("admin")) return false;
 
         if (!oldKey.equals(newKey)) {
             if (userMap.containsKey(newKey)) return false;
@@ -157,19 +156,37 @@ public class LoginSystem {
             userMap.put(newKey, u);
         }
         
-        // Update data
         u.setPassword(passwordNew);
         u.setNoTelepon(noTelepon);
         simpanDataKeFile();
         return true;
     }
 
+    // EDIT KASIR
     public boolean editKasir(String usernameOld, String usernameNew, String passwordNew, String noTelepon) {
-        // Sama dengan admin logic
-        return editAdmin(usernameOld, usernameNew, passwordNew, noTelepon);
+        if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
+        String oldKey = usernameOld.toLowerCase();
+        String newKey = usernameNew.toLowerCase();
+        
+        if (!userMap.containsKey(oldKey)) return false;
+        User u = userMap.get(oldKey);
+        
+        if (!u.getRole().equals("kasir")) return false;
+
+        if (!oldKey.equals(newKey)) {
+            if (userMap.containsKey(newKey)) return false;
+            userMap.remove(oldKey);
+            u.setUsername(usernameNew);
+            userMap.put(newKey, u);
+        }
+        
+        u.setPassword(passwordNew);
+        u.setNoTelepon(noTelepon);
+        simpanDataKeFile();
+        return true;
     }
-    
-    // Edit Member (Tidak ubah password)
+
+    // EDIT MEMBER
     public boolean editMember(String usernameOld, String usernameNew, String noTelepon) {
         if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
         String oldKey = usernameOld.toLowerCase();
@@ -177,6 +194,8 @@ public class LoginSystem {
         
         if (!userMap.containsKey(oldKey)) return false;
         User u = userMap.get(oldKey);
+        
+        if (!u.getRole().equals("pengguna")) return false;
 
         if (!oldKey.equals(newKey)) {
             if (userMap.containsKey(newKey)) return false;
@@ -201,7 +220,7 @@ public class LoginSystem {
         }
         return false;
     }
-    // Wrapper method agar AdminMenu tidak error
+    
     public boolean hapusAdmin(String u) { return hapusUser(u); }
     public boolean hapusKasir(String u) { return hapusUser(u); }
     public boolean hapusMember(String u) { return hapusUser(u); }
