@@ -1,1 +1,2 @@
+Biden;1234;082263888;kasir;false
 admin;admin123;0812345678;admin;true
