@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,9 +7,13 @@ public class CartMenu {
     private ArrayList<CartItem> cart = new ArrayList<>();
     private Scanner input = new Scanner(System.in);
 
+    private final String FILE_KERANJANG = "keranjang.txt";
+
     public static void main(String[] args) {
         CartMenu menu = new CartMenu();
+        menu.loadKeranjang();
         menu.ShowMenu();
+        menu.saveKeranjang();
     }
 
     public void ShowMenu(){
@@ -35,6 +40,8 @@ public class CartMenu {
             }
 
         } while (pilihMenu != 6);
+
+        saveKeranjang();
     }
 
     private void tambahKeranjang() {
@@ -52,6 +59,7 @@ public class CartMenu {
 
         cart.add(new CartItem(idBarang, nama, harga, jumlah));
         System.out.println("Barang '" + nama + "' ditambahkan ke keranjang!");
+        saveKeranjang();
     }
 
     private void updateJumlah() {
@@ -118,5 +126,27 @@ public class CartMenu {
         }
 
         System.out.println("Subtotal : " + total);
+    }
+    private void saveKeranjang() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("keranjang.txt"))) {
+        for (CartItem item : cart) {
+            bw.write(item.toString());
+            bw.newLine();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
+
+    private void loadKeranjang() {
+        try (BufferedReader br = new BufferedReader(new FileReader("keranjang.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            CartItem item = CartItem.fromString(line);
+            if (item != null) cart.add(item);
+        }
+    } catch (IOException e) {
+        System.out.println("keranjang.txt belum ada.");
+    }
     }
 }
