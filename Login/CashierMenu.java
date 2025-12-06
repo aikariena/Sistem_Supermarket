@@ -66,7 +66,7 @@ public class CashierMenu {
                     inputKodeKeranjang();
                     break;
                 case 2:
-                    cartCode.tampilkanSemuaKodeKeranjang();
+                    CartCode.tampilkanSemuaKodeKeranjang();
                     break;
                 case 3:
                     return;
@@ -83,14 +83,14 @@ public class CashierMenu {
         System.out.print("Masukkan kode keranjang member: ");
         String kodeKeranjang = input.nextLine();
 
-        ArrayList<CartItem> cart = cartCode.getKeranjangByKode(kodeKeranjang);
+        ArrayList<CartItem> cart = CartCode.getKeranjangByKode(kodeKeranjang);
         if (cart == null) {
             System.out.println("❌ Kode keranjang tidak ditemukan!");
             return;
         }
 
         // Tampilkan detail keranjang
-        cartCode.tampilkanDetailKeranjang(kodeKeranjang);
+        CartCode.tampilkanDetailKeranjang(kodeKeranjang);
 
         // Proses pembayaran
         System.out.print("\nProses pembayaran? (y/n): ");
