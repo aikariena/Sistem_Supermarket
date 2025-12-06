@@ -10,7 +10,7 @@ public class CartMenu {
     private Scanner input = new Scanner(System.in);
 
     private final String FILE_KERANJANG = "keranjang.txt";
-    private final String FILE_GUDANG = "../Gudang/database.txt";
+    private final String FILE_GUDANG = "Gudang/database.txt";
 
     // key=id, value=[nama, harga]
     private HashMap<String, String[]> gudangData = new HashMap<>(); 
