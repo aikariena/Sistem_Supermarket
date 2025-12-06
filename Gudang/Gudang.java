@@ -1,48 +1,42 @@
-import java.io.*; // Import untuk File I/O (File, FileWriter, BufferedWriter, dll)
+import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Gudang {
     private LinkedList<Barang> daftarBarang = new LinkedList<>();
-    private final String NAMA_FILE = "database.txt"; // Nama file database
+    private final String NAMA_FILE = "database.txt";
 
-    // Constructor: Otomatis membaca data saat objek Gudang dibuat
     public Gudang() {
         bacaDataDariFile();
     }
 
-    // --- LOGIKA FILE I/O ---
-
-    // Menyimpan seluruh list ke file txt
     private void simpanDataKeFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(NAMA_FILE))) {
             for (Barang b : daftarBarang) {
-                writer.write(b.toCSV()); // Tulis format: id;nama;harga;stok
-                writer.newLine();        // Ganti baris
+                writer.write(b.toCSV());
+                writer.newLine();
             }
         } catch (IOException e) {
             System.out.println("Error saat menyimpan ke database: " + e.getMessage());
         }
     }
 
-    // Membaca file txt dan memuatnya ke list
     private void bacaDataDariFile() {
         File file = new File(NAMA_FILE);
-        if (!file.exists()) return; // Jika file belum ada, abaikan
+        if (!file.exists()) return;
 
         try (Scanner fileScanner = new Scanner(file)) {
             while (fileScanner.hasNextLine()) {
                 String baris = fileScanner.nextLine();
-                String[] data = baris.split(";"); // Pecah berdasarkan titik koma
+                String[] data = baris.split(";");
 
-                if (data.length == 4) { // Pastikan format datanya benar (ada 4 kolom)
+                if (data.length == 4) { 
                     String id = data[0];
                     String nama = data[1];
                     double harga = Double.parseDouble(data[2]);
                     int stok = Integer.parseInt(data[3]);
                     
-                    // Masukkan ke list memori
                     daftarBarang.add(new Barang(id, nama, harga, stok));
                 }
             }
@@ -50,8 +44,6 @@ public class Gudang {
             System.out.println("Error saat membaca database: " + e.getMessage());
         }
     }
-
-    // --- FITUR GUDANG (Setiap perubahan akan memanggil simpanDataKeFile) ---
 
     public void tambahBarang(String idBarang, String nama, double harga, int stok) {
         for (Barang b : daftarBarang) {
@@ -61,7 +53,7 @@ public class Gudang {
             }
         }
         daftarBarang.add(new Barang(idBarang, nama, harga, stok));
-        simpanDataKeFile(); // <--- Simpan otomatis
+        simpanDataKeFile();
         System.out.println("Sukses: Barang ditambahkan dan disimpan.");
     }
 
@@ -71,7 +63,7 @@ public class Gudang {
             Barang b = iterator.next();
             if (b.getIdBarang().equalsIgnoreCase(idBarang)) {
                 iterator.remove();
-                simpanDataKeFile(); // <--- Simpan otomatis setelah hapus
+                simpanDataKeFile();
                 System.out.println("Sukses: Barang dihapus dari database.");
                 return;
             }
@@ -83,7 +75,7 @@ public class Gudang {
         for (Barang b : daftarBarang) {
             if (b.getIdBarang().equalsIgnoreCase(idBarang)) {
                 b.setStok(stokBaru);
-                simpanDataKeFile(); // <--- Simpan otomatis setelah update
+                simpanDataKeFile();
                 System.out.println("Sukses: Stok diperbarui.");
                 return;
             }
@@ -96,7 +88,7 @@ public class Gudang {
             if (b.getIdBarang().equalsIgnoreCase(idBarang)) {
                 b.setNama(namaBaru);
                 b.setHarga(hargaBaru);
-                simpanDataKeFile(); // <--- Simpan otomatis setelah edit
+                simpanDataKeFile();
                 System.out.println("Sukses: Data barang diperbarui.");
                 return;
             }
@@ -134,4 +126,5 @@ public class Gudang {
             System.out.println("Barang tidak ditemukan.");
         }
     }
+
 }
