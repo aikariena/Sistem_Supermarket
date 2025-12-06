@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -125,6 +126,10 @@ public class Gudang {
         if (!ditemukan) {
             System.out.println("Barang tidak ditemukan.");
         }
+    }
+
+    public ArrayList<Barang> getSemuaBarang() {
+        return new ArrayList<>(daftarBarang);
     }
 
 }
