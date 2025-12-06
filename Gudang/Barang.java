@@ -1,3 +1,5 @@
+package Gudang;
+
 public class Barang {
     private String idBarang;
     private String nama;

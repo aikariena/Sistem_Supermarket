@@ -1,5 +1,10 @@
+package Login;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+import Gudang.Gudang;
+import Keranjang.CartItem;
+import Pembayaran.PaymentMenu;
 
 public class CashierMenu {
     private LoginSystem loginSystem;

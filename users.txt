@@ -1,0 +1,2 @@
+admin;0812345678;admin;true
+kemal;08985626060;pengguna;false

@@ -1,3 +1,5 @@
+package Gudang;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,7 +8,7 @@ import java.util.Scanner;
 
 public class Gudang {
     private LinkedList<Barang> daftarBarang = new LinkedList<>();
-    private final String NAMA_FILE = "database.txt";
+    private final String NAMA_FILE = "Gudang/database.txt";
 
     public Gudang() {
         bacaDataDariFile();
