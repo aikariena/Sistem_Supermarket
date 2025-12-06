@@ -7,10 +7,18 @@ import java.util.Date;
 public class Receipt {
     private Transaction transaction;
     private double jumlahBayar;
+    private String namaKasir;
 
     public Receipt(Transaction transaction, double jumlahBayar) {
         this.transaction = transaction;
         this.jumlahBayar = jumlahBayar;
+        this.namaKasir = "";
+    }
+
+    public Receipt(Transaction transaction, double jumlahBayar, String namaKasir) {
+        this.transaction = transaction;
+        this.jumlahBayar = jumlahBayar;
+        this.namaKasir = namaKasir;
     }
 
     public void cetakStruk() {
@@ -20,6 +28,9 @@ public class Receipt {
         System.out.println("═════════════════════════════════════════════════════════");
         System.out.println("ID Transaksi: " + transaction.getTransactionId());
         System.out.println("Nama Pembeli: " + transaction.getUsername());
+        if (!namaKasir.isEmpty()) {
+            System.out.println("Kasir       : " + namaKasir);
+        }
         System.out.println("Tanggal    : " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date(transaction.getTanggalTransaksi())));
         System.out.println("─────────────────────────────────────────────────────────");
         System.out.println("RINCIAN BARANG:");
@@ -41,13 +52,6 @@ public class Receipt {
         System.out.printf("TOTAL PEMBAYARAN       : Rp %.0f\n", transaction.getTotal());
         System.out.println("─────────────────────────────────────────────────────────");
         System.out.printf("Metode Pembayaran      : %s\n", transaction.getTipePembayaran().toUpperCase());
-        
-        if (transaction.getTipePembayaran().equals("tunai")) {
-            double kembalian = jumlahBayar - transaction.getTotal();
-            System.out.printf("Jumlah Bayar           : Rp %.0f\n", jumlahBayar);
-            System.out.printf("Kembalian              : Rp %.0f\n", kembalian);
-        }
-        
         System.out.println("─────────────────────────────────────────────────────────");
         System.out.println("Status                 : " + transaction.getStatusPembayaran().toUpperCase());
         System.out.println("═════════════════════════════════════════════════════════");
@@ -64,6 +68,9 @@ public class Receipt {
             writer.write("═════════════════════════════════════════════════════════\n");
             writer.write("ID Transaksi: " + transaction.getTransactionId() + "\n");
             writer.write("Nama Pembeli: " + transaction.getUsername() + "\n");
+            if (!namaKasir.isEmpty()) {
+                writer.write("Kasir       : " + namaKasir + "\n");
+            }
             writer.write("Tanggal    : " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date(transaction.getTanggalTransaksi())) + "\n");
             writer.write("─────────────────────────────────────────────────────────\n");
             writer.write("RINCIAN BARANG:\n");
@@ -85,13 +92,6 @@ public class Receipt {
             writer.write(String.format("TOTAL PEMBAYARAN       : Rp %.0f\n", transaction.getTotal()));
             writer.write("─────────────────────────────────────────────────────────\n");
             writer.write("Metode Pembayaran      : " + transaction.getTipePembayaran().toUpperCase() + "\n");
-            
-            if (transaction.getTipePembayaran().equals("tunai")) {
-                double kembalian = jumlahBayar - transaction.getTotal();
-                writer.write(String.format("Jumlah Bayar           : Rp %.0f\n", jumlahBayar));
-                writer.write(String.format("Kembalian              : Rp %.0f\n", kembalian));
-            }
-            
             writer.write("─────────────────────────────────────────────────────────\n");
             writer.write("Status                 : " + transaction.getStatusPembayaran().toUpperCase() + "\n");
             writer.write("═════════════════════════════════════════════════════════\n");

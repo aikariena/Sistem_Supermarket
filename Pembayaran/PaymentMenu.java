@@ -7,18 +7,32 @@ import java.util.Date;
 import Gudang.Gudang;
 import Gudang.Barang;
 import Keranjang.CartItem;
+import Login.MemberBalance;
 
 public class PaymentMenu {
     private ArrayList<CartItem> cart;
     private Gudang gudang;
+    private MemberBalance memberBalance;
     private String username;
+    private String namaKasir;
     private Scanner input;
     private double PAJAK = 10.0; // 10% pajak
 
     public PaymentMenu(ArrayList<CartItem> cartItems, Gudang gudang, String username) {
         this.cart = cartItems;
         this.gudang = gudang;
+        this.memberBalance = new MemberBalance();
         this.username = username;
+        this.namaKasir = "";
+        this.input = new Scanner(System.in);
+    }
+
+    public PaymentMenu(ArrayList<CartItem> cartItems, Gudang gudang, String username, String namaKasir) {
+        this.cart = cartItems;
+        this.gudang = gudang;
+        this.memberBalance = new MemberBalance();
+        this.username = username;
+        this.namaKasir = namaKasir;
         this.input = new Scanner(System.in);
     }
 
@@ -90,7 +104,7 @@ public class PaymentMenu {
 
     private void prosesCheckout() {
         System.out.println("\n╔════════════════════════════════════════════════╗");
-        System.out.println("║            PROSES PEMBAYARAN");
+        System.out.println("║            PROSES PEMBAYARAN (SALDO)");
         System.out.println("╚════════════════════════════════════════════════╝");
 
         // Tampilkan ringkasan
@@ -103,44 +117,29 @@ public class PaymentMenu {
         System.out.printf("─────────────────────────────\n");
         System.out.printf("TOTAL            : Rp %.0f\n\n", total);
 
-        // Pilih metode pembayaran
-        System.out.println("Pilih Metode Pembayaran:");
-        System.out.println("1. Tunai");
-        System.out.println("2. Non-Tunai (Kartu/Transfer)");
-        System.out.print("Pilih: ");
-        int metode = input.nextInt();
-        input.nextLine();
+        // Cek saldo
+        double saldo = memberBalance.lihatSaldo(username);
+        System.out.printf("💰 Saldo Anda      : Rp %.0f\n", saldo);
 
-        String tipePembayaran = (metode == 1) ? "tunai" : "non-tunai";
-        double jumlahBayar = total;
-
-        if (metode == 1) {
-            System.out.print("\nJumlah uang yang diterima (Rp): ");
-            jumlahBayar = input.nextDouble();
-            input.nextLine();
-
-            if (jumlahBayar < total) {
-                System.out.println("❌ Jumlah pembayaran kurang!");
-                return;
-            }
-        } else if (metode == 2) {
-            System.out.println("Memproses pembayaran non-tunai...");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Pilihan tidak valid!");
+        if (saldo < total) {
+            System.out.printf("\n❌ Saldo tidak cukup!\n");
+            System.out.printf("   Kurang: Rp %.0f\n", total - saldo);
             return;
         }
 
         // Konfirmasi pembayaran
-        System.out.print("\nKonfirmasi pembayaran? (y/n): ");
+        System.out.print("\nKonfirmasi pembayaran via saldo? (y/n): ");
         String konfirmasi = input.nextLine().toLowerCase();
 
         if (!konfirmasi.equals("y")) {
             System.out.println("❌ Pembayaran dibatalkan!");
+            return;
+        }
+
+        // Kurangi saldo
+        boolean bayarBerhasil = memberBalance.bayarDariSaldo(username, total);
+        if (!bayarBerhasil) {
+            System.out.println("❌ Pembayaran gagal!");
             return;
         }
 
@@ -159,10 +158,10 @@ public class PaymentMenu {
 
         Transaction transaction = new Transaction(transactionId, username, transactionItems, PAJAK);
         transaction.setStatusPembayaran("completed");
-        transaction.setTipePembayaran(tipePembayaran);
+        transaction.setTipePembayaran("saldo");
 
-        // Cetak struk
-        Receipt receipt = new Receipt(transaction, jumlahBayar);
+        // Cetak struk (dengan nama kasir jika ada)
+        Receipt receipt = new Receipt(transaction, total, namaKasir);
         receipt.cetakStruk();
         receipt.simpanKeFile();
 
@@ -170,6 +169,7 @@ public class PaymentMenu {
         updateStokGudang();
 
         System.out.println("✅ Transaksi berhasil diproses!");
+        System.out.printf("✓ Saldo baru Anda: Rp %.0f\n", memberBalance.lihatSaldo(username));
         System.out.println("Keranjang dikosongkan...");
         cart.clear();
     }

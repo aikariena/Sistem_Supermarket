@@ -101,7 +101,8 @@ public class CashierMenu {
             System.out.print("Username member: ");
             String usernameMember = input.nextLine();
 
-            PaymentMenu paymentMenu = new PaymentMenu(cart, gudang, usernameMember);
+            User kasir = loginSystem.getUserSekarang();
+            PaymentMenu paymentMenu = new PaymentMenu(cart, gudang, usernameMember, kasir.getUsername());
             paymentMenu.showPaymentMenu();
 
             // Hapus keranjang setelah pembayaran selesai

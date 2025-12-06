@@ -10,6 +10,7 @@ public class UserMenu {
     private LoginSystem loginSystem;
     private Gudang gudang;
     private CartCode cartCode;
+    private MemberBalance memberBalance;
     private ArrayList<CartItem> cart;
     private Scanner input;
 
@@ -17,6 +18,7 @@ public class UserMenu {
         this.loginSystem = loginSystem;
         this.gudang = new Gudang();
         this.cartCode = new CartCode();
+        this.memberBalance = new MemberBalance();
         this.cart = new ArrayList<>();
         this.input = new Scanner(System.in);
     }
@@ -32,7 +34,8 @@ public class UserMenu {
             System.out.println("1. Gudang (Browse Produk)");
             System.out.println("2. Keranjang Belanja Saya");
             System.out.println("3. Buat Kode Keranjang (untuk Kasir)");
-            System.out.println("4. Logout");
+            System.out.println("4. Manajemen Saldo");
+            System.out.println("5. Logout");
             System.out.print("Pilih Menu: ");
             pilih = input.nextInt();
             input.nextLine();
@@ -48,13 +51,16 @@ public class UserMenu {
                     buatKodeKeranjang();
                     break;
                 case 4:
+                    manajemenSaldo();
+                    break;
+                case 5:
                     System.out.println("Logout berhasil!");
                     loginSystem.logout();
                     break;
                 default:
                     System.out.println("Pilihan tidak valid!");
             }
-        } while (pilih != 4);
+        } while (pilih != 5);
     }
 
     private void browseGudang() {
@@ -201,5 +207,61 @@ public class UserMenu {
         } else {
             System.out.println("Pembatalan pembuatan kode keranjang.");
         }
+    }
+
+    private void manajemenSaldo() {
+        User user = loginSystem.getUserSekarang();
+        double saldoSekarang = memberBalance.lihatSaldo(user.getUsername());
+
+        int pilih;
+        do {
+            System.out.println("\n╔════════════════════════════════════════════════╗");
+            System.out.println("║        MANAJEMEN SALDO");
+            System.out.println("╚════════════════════════════════════════════════╝");
+            System.out.printf("💰 Saldo Anda: Rp%.0f\n\n", saldoSekarang);
+            System.out.println("1. Setor Saldo");
+            System.out.println("2. Tarik Saldo");
+            System.out.println("3. Kembali");
+            System.out.print("Pilih Menu: ");
+            pilih = input.nextInt();
+            input.nextLine();
+
+            switch (pilih) {
+                case 1:
+                    setorSaldo(user.getUsername());
+                    saldoSekarang = memberBalance.lihatSaldo(user.getUsername());
+                    break;
+                case 2:
+                    tarikSaldo(user.getUsername());
+                    saldoSekarang = memberBalance.lihatSaldo(user.getUsername());
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Pilihan tidak valid!");
+            }
+        } while (pilih != 3);
+    }
+
+    private void setorSaldo(String username) {
+        System.out.println("\n╔════════════════════════════════════════════════╗");
+        System.out.println("║        SETOR SALDO");
+        System.out.println("╚════════════════════════════════════════════════╝");
+        System.out.print("Jumlah setor (Rp): ");
+        double jumlah = input.nextDouble();
+        input.nextLine();
+
+        memberBalance.setorSaldo(username, jumlah);
+    }
+
+    private void tarikSaldo(String username) {
+        System.out.println("\n╔════════════════════════════════════════════════╗");
+        System.out.println("║        TARIK SALDO");
+        System.out.println("╚════════════════════════════════════════════════╝");
+        System.out.print("Jumlah tarik (Rp): ");
+        double jumlah = input.nextDouble();
+        input.nextLine();
+
+        memberBalance.tarikSaldo(username, jumlah);
     }
 }

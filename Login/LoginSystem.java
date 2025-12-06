@@ -72,6 +72,11 @@ public class LoginSystem {
         User userBaru = new User(username, noTelepon, "pengguna");
         daftarUser.add(userBaru);
         simpanDataKeFile();
+        
+        // Inisialisasi saldo untuk member baru
+        MemberBalance mb = new MemberBalance();
+        mb.initSaldoMember(username);
+        
         return true;
     }
 
