@@ -92,6 +92,7 @@ public class LoginSystem {
         userMap.put(username.toLowerCase(), userBaru);
         simpanDataKeFile();
         
+        // Init saldo awal 0
         MemberBalance mb = new MemberBalance();
         mb.initSaldoMember(username);
         return true;
@@ -208,14 +209,21 @@ public class LoginSystem {
         return true;
     }
 
+    // --- FIX: HAPUS USER SEKALIGUS SALDO ---
     public boolean hapusUser(String username) {
         if (userLoginSekarang == null || !userLoginSekarang.getRole().equals("admin")) return false;
         String key = username.toLowerCase();
         User u = userMap.get(key);
         
         if(u != null && !u.isDefault()) {
+            // 1. Hapus dari database user
             userMap.remove(key);
             simpanDataKeFile();
+            
+            // 2. Hapus juga saldonya (Panggil MemberBalance)
+            MemberBalance mb = new MemberBalance();
+            mb.hapusSaldomember(username);
+            
             return true;
         }
         return false;
