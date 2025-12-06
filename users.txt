@@ -1,0 +1,5 @@
+admin;0812345678;admin;true
+kemal;08985626060;pengguna;false
+aika;081234321;kasir;false
+akmal;12345678;admin;false
+kemalz;0987654321;pengguna;false

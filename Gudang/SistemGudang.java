@@ -1,112 +1,6 @@
-import java.util.Iterator;
-import java.util.LinkedList;
+package Gudang;
+
 import java.util.Scanner;
-
-class Barang {
-    private String id;
-    private String nama;
-    private double harga;
-    private int stok;
-
-    public Barang(String id, String nama, double harga, int stok) {
-        this.id = id;
-        this.nama = nama;
-        this.harga = harga;
-        this.stok = stok;
-    }
-
-    public String getId() { return id; }
-    public String getNama() { return nama; }
-    public double getHarga() { return harga; }
-    public int getStok() { return stok; }
-    
-    public void setNama(String nama) { this.nama = nama; }
-    public void setHarga(double harga) { this.harga = harga; }
-    public void setStok(int stok) { this.stok = stok; }
-}
-
-class Gudang {
-    private LinkedList<Barang> daftarBarang = new LinkedList<>();
-
-    public void tambahBarang(String id, String nama, double harga, int stok) {
-        for (Barang b : daftarBarang) {
-            if (b.getId().equalsIgnoreCase(id)) {
-                System.out.println("Gagal: ID Barang sudah ada!");
-                return;
-            }
-        }
-        Barang barangBaru = new Barang(id, nama, harga, stok);
-        daftarBarang.add(barangBaru);
-        System.out.println("Sukses: Barang berhasil ditambahkan.");
-    }
-
-    public void hapusBarang(String id) {
-        Iterator<Barang> iterator = daftarBarang.iterator();
-        while (iterator.hasNext()) {
-            Barang b = iterator.next();
-            if (b.getId().equalsIgnoreCase(id)) {
-                iterator.remove();
-                System.out.println("Sukses: Barang dengan ID " + id + " telah dihapus.");
-                return;
-            }
-        }
-        System.out.println("Gagal: Barang dengan ID tersebut tidak ditemukan.");
-    }
-
-    public void updateStok(String id, int stokBaru) {
-        for (Barang b : daftarBarang) {
-            if (b.getId().equalsIgnoreCase(id)) {
-                b.setStok(stokBaru);
-                System.out.println("Sukses: Stok barang '" + b.getNama() + "' menjadi " + stokBaru);
-                return;
-            }
-        }
-        System.out.println("Gagal: ID Barang tidak ditemukan.");
-    }
-
-    public void editBarang(String id, String namaBaru, double hargaBaru) {
-        for (Barang b : daftarBarang) {
-            if (b.getId().equalsIgnoreCase(id)) {
-                b.setNama(namaBaru);
-                b.setHarga(hargaBaru);
-                System.out.println("Sukses: Data barang berhasil diperbarui.");
-                return;
-            }
-        }
-        System.out.println("Gagal: ID Barang tidak ditemukan.");
-    }
-
-    public void tampilkanSemuaBarang() {
-        if (daftarBarang.isEmpty()) {
-            System.out.println("Gudang kosong.");
-            return;
-        }
-
-        System.out.println("-----------------------------------------------------------------");
-        System.out.printf("| %-10s | %-20s | %-15s | %-8s |\n", "ID", "Nama Barang", "Harga (Rp)", "Stok");
-        System.out.println("-----------------------------------------------------------------");
-        for (Barang b : daftarBarang) {
-            System.out.printf("| %-10s | %-20s | Rp %-12.0f | %-8d |\n", 
-                b.getId(), b.getNama(), b.getHarga(), b.getStok());
-        }
-        System.out.println("-----------------------------------------------------------------");
-    }
-
-    public void cariBarang(String keyword) {
-        boolean ditemukan = false;
-        System.out.println("Hasil Pencarian:");
-        for (Barang b : daftarBarang) {
-            if (b.getId().equalsIgnoreCase(keyword) || b.getNama().toLowerCase().contains(keyword.toLowerCase())) {
-                String status = (b.getStok() > 0) ? "Tersedia" : "Habis";
-                System.out.println("- [" + b.getId() + "] " + b.getNama() + " | Stok: " + b.getStok() + " (" + status + ")");
-                ditemukan = true;
-            }
-        }
-        if (!ditemukan) {
-            System.out.println("Barang tidak ditemukan.");
-        }
-    }
-}
 
 public class SistemGudang {
     public static void main(String[] args) {
@@ -143,14 +37,14 @@ public class SistemGudang {
 
                 case 2:
                     System.out.print("Masukkan ID Barang: ");
-                    String id = scanner.nextLine();
+                    String idBarang = scanner.nextLine();
                     System.out.print("Masukkan Nama Barang: ");
                     String nama = scanner.nextLine();
                     System.out.print("Masukkan Harga: ");
                     double harga = scanner.nextDouble();
                     System.out.print("Masukkan Jumlah Stok: ");
                     int stok = scanner.nextInt();
-                    gudang.tambahBarang(id, nama, harga, stok);
+                    gudang.tambahBarang(idBarang, nama, harga, stok);
                     break;
 
                 case 3:
@@ -194,4 +88,5 @@ public class SistemGudang {
 
         scanner.close();
     }
+
 }
