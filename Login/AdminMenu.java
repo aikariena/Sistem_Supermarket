@@ -43,7 +43,6 @@ public class AdminMenu {
         } while (pilih != 6);
     }
 
-    // --- MENU GUDANG (Tetap Sama dengan File Asli Kamu) ---
     private void menuGudang() {
         int pilih;
         do {
@@ -76,7 +75,6 @@ public class AdminMenu {
         } while (pilih != 7);
     }
 
-    // --- KELOLA ADMIN (UPDATE PASSWORD) ---
     private void kelolaAdmin() {
         System.out.println("\n1. Lihat | 2. Tambah | 3. Edit | 4. Hapus | 5. Back");
         int p = input.nextInt(); input.nextLine();
@@ -94,10 +92,10 @@ public class AdminMenu {
     private void tambahAdminBaru() {
         System.out.println("\n[TAMBAH ADMIN]");
         System.out.print("Username: "); String u = input.nextLine();
-        System.out.print("Password: "); String pw = input.nextLine(); // NEW
+        System.out.print("Password: "); String pw = input.nextLine();
         System.out.print("No Telp: "); String t = input.nextLine();
-        if(loginSystem.tambahAdmin(u, pw, t)) System.out.println("✅ Sukses");
-        else System.out.println("❌ Gagal");
+        if(loginSystem.tambahAdmin(u, pw, t)) System.out.println("Sukses");
+        else System.out.println("Gagal");
     }
 
     private void editAdmin() {
@@ -113,16 +111,15 @@ public class AdminMenu {
         if(t.isEmpty()) t = u.getNoTelepon();
         
         loginSystem.editAdmin(old, un, pw, t);
-        System.out.println("✅ Update Sukses");
+        System.out.println("Update Sukses");
     }
 
     private void hapusAdmin() {
         System.out.print("Username Hapus: ");
-        if(loginSystem.hapusAdmin(input.nextLine())) System.out.println("✅ Terhapus");
-        else System.out.println("❌ Gagal");
+        if(loginSystem.hapusAdmin(input.nextLine())) System.out.println("Terhapus");
+        else System.out.println("Gagal");
     }
 
-    // --- KELOLA KASIR (UPDATE PASSWORD) ---
     private void kelolaKasir() {
         System.out.println("\n1. Lihat | 2. Tambah | 3. Edit | 4. Hapus | 5. Back");
         int p = input.nextInt(); input.nextLine();
@@ -140,10 +137,10 @@ public class AdminMenu {
     private void tambahKasirBaru() {
         System.out.println("\n[TAMBAH KASIR]");
         System.out.print("Username: "); String u = input.nextLine();
-        System.out.print("Password: "); String pw = input.nextLine(); // NEW
+        System.out.print("Password: "); String pw = input.nextLine();
         System.out.print("No Telp: "); String t = input.nextLine();
-        if(loginSystem.tambahKasir(u, pw, t)) System.out.println("✅ Sukses");
-        else System.out.println("❌ Gagal");
+        if(loginSystem.tambahKasir(u, pw, t)) System.out.println("Sukses");
+        else System.out.println("Gagal");
     }
 
     private void editKasir() {
@@ -159,16 +156,15 @@ public class AdminMenu {
         if(t.isEmpty()) t = u.getNoTelepon();
         
         loginSystem.editKasir(old, un, pw, t);
-        System.out.println("✅ Update Sukses");
+        System.out.println("Update Sukses");
     }
 
     private void hapusKasir() {
         System.out.print("Username Hapus: ");
-        if(loginSystem.hapusKasir(input.nextLine())) System.out.println("✅ Terhapus");
-        else System.out.println("❌ Gagal");
+        if(loginSystem.hapusKasir(input.nextLine())) System.out.println("Terhapus");
+        else System.out.println("Gagal");
     }
 
-    // --- KELOLA MEMBER (LOGIC LAMA/NO PASSWORD) ---
     private void kelolaMember() {
         System.out.println("\n1. Lihat | 2. Tambah | 3. Edit | 4. Hapus | 5. Back");
         int p = input.nextInt(); input.nextLine();
@@ -186,8 +182,8 @@ public class AdminMenu {
     private void tambahMemberBaru() {
         System.out.print("Username: "); String u = input.nextLine();
         System.out.print("No Telp: "); String t = input.nextLine();
-        if(loginSystem.register(u, t)) System.out.println("✅ Sukses");
-        else System.out.println("❌ Gagal");
+        if(loginSystem.register(u, t)) System.out.println("Sukses");
+        else System.out.println("Gagal");
     }
 
     private void editMember() {
@@ -197,13 +193,13 @@ public class AdminMenu {
         System.out.print("No Telp Baru: "); String t = input.nextLine();
         
         loginSystem.editMember(old, un, t);
-        System.out.println("✅ Update Sukses");
+        System.out.println("Update Sukses");
     }
 
     private void hapusMember() {
         System.out.print("Username Hapus: ");
-        if(loginSystem.hapusMember(input.nextLine())) System.out.println("✅ Terhapus");
-        else System.out.println("❌ Gagal");
+        if(loginSystem.hapusMember(input.nextLine())) System.out.println("Terhapus");
+        else System.out.println("Gagal");
     }
 
     private void lihatLaporan() {

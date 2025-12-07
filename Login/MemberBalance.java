@@ -60,7 +60,7 @@ public class MemberBalance {
     // Setor saldo
     public boolean setorSaldo(String username, double jumlah) {
         if (jumlah <= 0) {
-            System.out.println("❌ Jumlah setor harus lebih dari 0!");
+            System.out.println("Jumlah setor harus lebih dari 0!");
             return false;
         }
 
@@ -68,33 +68,33 @@ public class MemberBalance {
         saldoMember.put(username, saldoSekarang + jumlah);
         simpanDataKeFile();
         
-        System.out.println("✅ Setor saldo berhasil!");
-        System.out.printf("   Jumlah: Rp%.0f\n", jumlah);
-        System.out.printf("   Saldo baru: Rp%.0f\n", saldoMember.get(username));
+        System.out.println("Setor saldo berhasil!");
+        System.out.printf("Jumlah: Rp%.0f\n", jumlah);
+        System.out.printf("Saldo baru: Rp%.0f\n", saldoMember.get(username));
         return true;
     }
 
     // Tarik saldo
     public boolean tarikSaldo(String username, double jumlah) {
         if (jumlah <= 0) {
-            System.out.println("❌ Jumlah tarik harus lebih dari 0!");
+            System.out.println("Jumlah tarik harus lebih dari 0!");
             return false;
         }
 
         double saldoSekarang = saldoMember.getOrDefault(username, 0.0);
         
         if (saldoSekarang < jumlah) {
-            System.out.println("❌ Saldo tidak cukup!");
-            System.out.printf("   Saldo Anda: Rp%.0f\n", saldoSekarang);
+            System.out.println("Saldo tidak cukup!");
+            System.out.printf("Saldo Anda: Rp%.0f\n", saldoSekarang);
             return false;
         }
 
         saldoMember.put(username, saldoSekarang - jumlah);
         simpanDataKeFile();
         
-        System.out.println("✅ Tarik saldo berhasil!");
-        System.out.printf("   Jumlah: Rp%.0f\n", jumlah);
-        System.out.printf("   Saldo baru: Rp%.0f\n", saldoMember.get(username));
+        System.out.println("Tarik saldo berhasil!");
+        System.out.printf("Jumlah: Rp%.0f\n", jumlah);
+        System.out.printf("Saldo baru: Rp%.0f\n", saldoMember.get(username));
         return true;
     }
 

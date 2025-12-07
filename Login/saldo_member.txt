@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-kemal;34000.0
-=======
-Rumi;0.0
->>>>>>> Stashed changes
+

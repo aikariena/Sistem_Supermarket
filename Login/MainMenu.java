@@ -71,14 +71,14 @@ public class MainMenu {
             if ((tipe == 1 && !user.getRole().equals("admin")) ||
                 (tipe == 2 && !user.getRole().equals("kasir")) ||
                 (tipe == 3 && !user.getRole().equals("pengguna"))) {
-                System.out.println("❌ Role akun tidak sesuai!");
+                System.out.println("Role akun tidak sesuai!");
                 return;
             }
             
-            System.out.println("✅ Login berhasil!");
+            System.out.println("Login berhasil!");
             routeToMenu(user);
         } else {
-            System.out.println("❌ Gagal login. Cek data anda.");
+            System.out.println("Gagal login. Cek data anda.");
         }
     }
 
@@ -90,9 +90,9 @@ public class MainMenu {
         String noTelepon = input.nextLine();
 
         if (loginSystem.register(username, noTelepon)) {
-            System.out.println("✅ Registrasi berhasil! Silakan login.");
+            System.out.println("Registrasi berhasil! Silakan login.");
         } else {
-            System.out.println("❌ Username sudah terdaftar.");
+            System.out.println("Username sudah terdaftar.");
         }
     }
 

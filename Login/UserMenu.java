@@ -39,22 +39,21 @@ public class UserMenu {
             System.out.println("4. Manajemen Saldo");
             System.out.println("5. Logout");
             System.out.print("Pilih Menu: ");
-            pilih = input.nextInt();
-            input.nextLine();
+            
+            try {
+                pilih = input.nextInt();
+                input.nextLine();
+            } catch (Exception e) {
+                System.out.println("Input harus angka!");
+                input.nextLine();
+                pilih = 0;
+            }
 
             switch (pilih) {
-                case 1:
-                    browseGudang();
-                    break;
-                case 2:
-                    lihatKeranjangSaya();
-                    break;
-                case 3:
-                    buatKodeKeranjang();
-                    break;
-                case 4:
-                    manajemenSaldo();
-                    break;
+                case 1: browseGudang(); break;
+                case 2: lihatKeranjangSaya(); break;
+                case 3: buatKodeKeranjang(); break;
+                case 4: manajemenSaldo(); break;
                 case 5:
                     System.out.println("Logout berhasil!");
                     loginSystem.logout();
@@ -74,11 +73,16 @@ public class UserMenu {
         do {
             System.out.println("\n1. Lihat semua produk");
             System.out.println("2. Cari produk");
-            System.out.println("3. Tambah ke keranjang");
+            System.out.println("3. Tambah ke keranjang (Otomatis)");
             System.out.println("4. Kembali");
             System.out.print("Pilih: ");
-            pilih = input.nextInt();
-            input.nextLine();
+            try {
+                pilih = input.nextInt();
+                input.nextLine();
+            } catch (Exception e) {
+                input.nextLine();
+                pilih = 0;
+            }
 
             switch (pilih) {
                 case 1:
@@ -90,7 +94,7 @@ public class UserMenu {
                     gudang.cariBarang(keyword);
                     break;
                 case 3:
-                    tambahKeranjang();
+                    tambahKeKeranjangOtomatis();
                     break;
                 case 4:
                     return;
@@ -100,57 +104,66 @@ public class UserMenu {
         } while (pilih != 4);
     }
 
-    // ===================== PERBAIKAN TAMBAH KERANJANG ======================
-    private void tambahKeranjang() {
+    private void tambahKeKeranjangOtomatis() {
         System.out.print("Masukkan ID Barang: ");
-        String id = input.nextLine().toUpperCase();
+        String idTarget = input.nextLine();
 
-        // Ambil data dari gudang
-        Barang data = gudang.getBarangById(id);
-        if (data == null) {
-            System.out.println("❌ ID barang tidak ditemukan!");
+        Barang barangDitemukan = gudang.getBarangById(idTarget);
+
+        if (barangDitemukan == null) {
+            System.out.println("Barang dengan ID '" + idTarget + "' tidak ditemukan!");
             return;
         }
 
-        String nama = data.getNama();
-        double harga = data.getHarga();
+        System.out.println("Barang Ditemukan: " + barangDitemukan.getNama());
+        System.out.printf("   Harga: Rp%.0f\n", barangDitemukan.getHarga());
+        System.out.println("   Stok Tersedia: " + barangDitemukan.getStok());
 
-        System.out.print("Jumlah: ");
-        if (!input.hasNextInt()) {
-            System.out.println("❌ Input jumlah tidak valid.");
+        System.out.print("Masukkan Jumlah Beli: ");
+        int jumlahBeli = 0;
+        try {
+            jumlahBeli = input.nextInt();
+            input.nextLine();
+        } catch (Exception e) {
+            System.out.println("Input jumlah salah!");
             input.nextLine();
             return;
         }
-        int jumlah = input.nextInt();
-        input.nextLine();
 
-        if (jumlah <= 0) {
-            System.out.println("❌ Jumlah harus lebih dari nol.");
+        if (jumlahBeli <= 0) {
+            System.out.println("Jumlah harus lebih dari 0.");
             return;
         }
 
-        // Jika barang sudah ada di keranjang → update jumlah
-        boolean found = false;
+        if (jumlahBeli > barangDitemukan.getStok()) {
+            System.out.println("Stok tidak mencukupi!");
+            return;
+        }
+
+        boolean isExist = false;
         for (CartItem item : cart) {
-            if (item.getIdBarang().equals(id)) {
-                item.setJumlah(item.getJumlah() + jumlah);
-                found = true;
+            if (item.getIdBarang().equalsIgnoreCase(barangDitemukan.getIdBarang())) {
+                item.setJumlah(item.getJumlah() + jumlahBeli);
+                isExist = true;
+                System.out.println("Jumlah barang di keranjang diperbarui.");
                 break;
             }
         }
 
-        // Jika belum ada → tambah baru
-        if (!found) {
-            cart.add(new CartItem(id, nama, harga, jumlah));
+        if (!isExist) {
+            cart.add(new CartItem(
+                barangDitemukan.getIdBarang(), 
+                barangDitemukan.getNama(), 
+                (int)barangDitemukan.getHarga(), 
+                jumlahBeli
+            ));
+            System.out.println("Berhasil masuk keranjang!");
         }
-
-        System.out.println("✅ Barang '" + nama + "' ditambahkan ke keranjang!");
     }
-    // ======================================================================
 
     private void lihatKeranjangSaya() {
         if (cart.isEmpty()) {
-            System.out.println("\n⚠️  Keranjang Anda kosong!");
+            System.out.println("\nKeranjang Anda kosong!");
             return;
         }
 
@@ -159,19 +172,25 @@ public class UserMenu {
         System.out.println("╚════════════════════════════════════════════════╝");
 
         double total = 0;
-        System.out.printf("%-5s %-10s %-30s %-10s %-10s %-12s\n",
-            "No", "ID", "Nama", "Harga", "Jumlah", "Subtotal");
-        System.out.println("─".repeat(82));
+        // Format Header Tabel
+        System.out.printf("%-4s %-10s %-30s %-15s %-8s %-15s\n",
+            "No", "ID", "Nama", "Harga", "Qty", "Subtotal");
+        System.out.println("─".repeat(85));
 
         int no = 1;
         for (CartItem item : cart) {
-            System.out.printf("%-5d %-10s %-30s Rp%-10.0f %-10d Rp%-10.0f\n",
-                no++, item.getIdBarang(), item.getNama(),
-                item.getHarga(), item.getJumlah(), item.getSubtotal());
+            // Format Baris Tabel: %.0f untuk menghilangkan desimal
+            System.out.printf("%-4d %-10s %-30s Rp%-13.0f %-8d Rp%-13.0f\n",
+                no++, 
+                item.getIdBarang(), 
+                item.getNama(),
+                (double)item.getHarga(), // Casting ke double biar aman di %.0f
+                item.getJumlah(), 
+                item.getSubtotal());
             total += item.getSubtotal();
         }
 
-        System.out.println("─".repeat(82));
+        System.out.println("─".repeat(85));
         System.out.printf("TOTAL: Rp%.0f\n", total);
 
         System.out.println("\n1. Hapus item");
@@ -188,7 +207,7 @@ public class UserMenu {
                 input.nextLine();
                 if (noHapus > 0 && noHapus <= cart.size()) {
                     cart.remove(noHapus - 1);
-                    System.out.println("✅ Item dihapus!");
+                    System.out.println("Item dihapus!");
                 }
                 break;
             case 2:
@@ -199,7 +218,7 @@ public class UserMenu {
                 input.nextLine();
                 if (noItem > 0 && noItem <= cart.size()) {
                     cart.get(noItem - 1).setJumlah(jumlahBaru);
-                    System.out.println("✅ Jumlah item diubah!");
+                    System.out.println("Jumlah item diubah!");
                 }
                 break;
         }
@@ -207,7 +226,7 @@ public class UserMenu {
 
     private void buatKodeKeranjang() {
         if (cart.isEmpty()) {
-            System.out.println("\n⚠️  Keranjang Anda kosong! Tambah barang terlebih dahulu.");
+            System.out.println("\nKeranjang Anda kosong! Tambah barang terlebih dahulu.");
             return;
         }
 
@@ -216,19 +235,25 @@ public class UserMenu {
         System.out.println("╚════════════════════════════════════════════════╝");
 
         double total = 0;
-        System.out.printf("%-5s %-10s %-30s %-10s %-10s %-12s\n",
-            "No", "ID", "Nama", "Harga", "Jumlah", "Subtotal");
-        System.out.println("─".repeat(82));
+        // Format Header Tabel yang Rapi
+        System.out.printf("%-4s %-10s %-30s %-15s %-8s %-15s\n",
+            "No", "ID", "Nama", "Harga", "Qty", "Subtotal");
+        System.out.println("─".repeat(85));
 
         int no = 1;
         for (CartItem item : cart) {
-            System.out.printf("%-5d %-10s %-30s Rp%-8f %-10d Rp%f\n",
-                no++, item.getIdBarang(), item.getNama(),
-                item.getHarga(), item.getJumlah(), item.getSubtotal());
+            // PERBAIKAN UTAMA DI SINI: Menggunakan %.0f
+            System.out.printf("%-4d %-10s %-30s Rp%-13.0f %-8d Rp%-13.0f\n",
+                no++, 
+                item.getIdBarang(), 
+                item.getNama(),
+                (double)item.getHarga(), 
+                item.getJumlah(), 
+                item.getSubtotal());
             total += item.getSubtotal();
         }
 
-        System.out.println("─".repeat(82));
+        System.out.println("─".repeat(85));
         System.out.printf("TOTAL: Rp%.0f\n", total);
 
         System.out.print("\nBuat kode keranjang? (y/n): ");
@@ -236,10 +261,10 @@ public class UserMenu {
 
         if (jawab.equalsIgnoreCase("y")) {
             String kode = cartCode.buatKodeKeranjang(new ArrayList<>(cart));
-            System.out.println("\n✅ Kode keranjang berhasil dibuat!");
-            System.out.println("📝 Kode Anda: " + kode);
-            System.out.println("   Berikan kode ini kepada kasir untuk diproses.");
-            System.out.println("   Keranjang Anda akan dikosongkan.");
+            System.out.println("\nKode keranjang berhasil dibuat!");
+            System.out.println("Berikan kode ini kepada kasir untuk diproses.");
+            System.out.println("Keranjang Anda akan dikosongkan.");
+
             cart.clear();
         } else {
             System.out.println("Pembatalan pembuatan kode keranjang.");
@@ -255,7 +280,7 @@ public class UserMenu {
             System.out.println("\n╔════════════════════════════════════════════════╗");
             System.out.println("║        MANAJEMEN SALDO");
             System.out.println("╚════════════════════════════════════════════════╝");
-            System.out.printf("💰 Saldo Anda: Rp%.0f\n\n", saldoSekarang);
+            System.out.printf("Saldo Anda: Rp%.0f\n\n", saldoSekarang);
             System.out.println("1. Setor Saldo");
             System.out.println("2. Tarik Saldo");
             System.out.println("3. Kembali");
