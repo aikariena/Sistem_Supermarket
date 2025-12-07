@@ -45,9 +45,9 @@ public class CartMenu {
                     gudangData.put(id, new String[]{nama, hargaStr});
                 }
             }
-            System.out.println("\n✅ Data gudang berhasil dimuat: " + gudangData.size() + " item.");
+            System.out.println("\nData gudang berhasil dimuat: " + gudangData.size() + " item.");
         } catch (IOException e) {
-            System.err.println("\n❌ ERROR: File gudang tidak ditemukan! Pastikan jalur : " + FILE_GUDANG);
+            System.err.println("\nERROR: File gudang tidak ditemukan! Pastikan jalur : " + FILE_GUDANG);
         }
     }
 
@@ -91,7 +91,7 @@ public class CartMenu {
         String id = input.nextLine().toUpperCase(); 
 
         if (!gudangData.containsKey(id)) {
-            System.out.println("❌ ID tidak ditemukan di gudang!");
+            System.out.println("ID tidak ditemukan di gudang!");
             return;
         }
 
@@ -105,13 +105,13 @@ public class CartMenu {
             jumlah = input.nextInt();
             input.nextLine();
         } else {
-            System.out.println("❌ Input jumlah tidak valid.");
+            System.out.println("Input jumlah tidak valid.");
             input.nextLine();
             return;
         }
 
         if (jumlah <= 0) {
-            System.out.println("❌ Jumlah harus lebih dari nol.");
+            System.out.println("Jumlah harus lebih dari nol.");
             return;
         }
 
@@ -145,7 +145,7 @@ public class CartMenu {
             idx = input.nextInt() - 1;
             input.nextLine();
         } else {
-            System.out.println("❌ Input nomor tidak valid.");
+            System.out.println("Input nomor tidak valid.");
             input.nextLine();
             return;
         }
@@ -157,7 +157,7 @@ public class CartMenu {
                 jumlah = input.nextInt();
                 input.nextLine();
             } else {
-                System.out.println("❌ Input jumlah tidak valid.");
+                System.out.println("Input jumlah tidak valid.");
                 input.nextLine();
                 return;
             }
@@ -173,10 +173,10 @@ public class CartMenu {
                 System.out.println("Barang '" + namaHapus + "' dihapus dari keranjang (karena jumlah = 0).");
                 saveKeranjang();
             } else {
-                System.out.println("❌ Jumlah tidak boleh negatif.");
+                System.out.println("Jumlah tidak boleh negatif.");
             }
         } else {
-            System.out.println("❌ Nomor tidak valid!");
+            System.out.println("Nomor tidak valid!");
         }
     }
 
@@ -192,7 +192,7 @@ public class CartMenu {
             idx = input.nextInt() - 1;
             input.nextLine();
         } else {
-            System.out.println("❌ Input nomor tidak valid.");
+            System.out.println("Input nomor tidak valid.");
             input.nextLine();
             return;
         }
@@ -203,7 +203,7 @@ public class CartMenu {
             System.out.println("Barang '" + namaHapus + "' berhasil dihapus!");
             saveKeranjang();
         } else {
-            System.out.println("❌ Nomor tidak valid!");
+            System.out.println("Nomor tidak valid!");
         }
     }
 
@@ -248,7 +248,7 @@ public class CartMenu {
                 bw.newLine();
             }
         } catch(IOException e) {
-            System.err.println("❌ Error menyimpan keranjang : "+e.getMessage());
+            System.err.println("Error menyimpan keranjang : "+e.getMessage());
         }
     }
 
@@ -264,7 +264,7 @@ public class CartMenu {
                 }
             }
             if (loadedCount > 0) {
-                System.out.println("✅ " + loadedCount + " item keranjang berhasil dimuat dari sesi sebelumnya.");
+                System.out.println(loadedCount + " item keranjang berhasil dimuat dari sesi sebelumnya.");
             }
         } catch(IOException e) {
             // Ini normal jika file belum ada
