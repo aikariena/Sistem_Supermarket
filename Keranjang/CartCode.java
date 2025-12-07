@@ -124,7 +124,7 @@ public class CartCode {
     public void tampilkanDetailKeranjang(String kodeKeranjang) {
         ArrayList<CartItem> items = cartDatabase.get(kodeKeranjang);
         if (items == null) {
-            System.out.println("❌ Kode keranjang tidak ditemukan!");
+            System.out.println("Kode keranjang tidak ditemukan!");
             return;
         }
 
