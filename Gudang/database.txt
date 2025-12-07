@@ -8,7 +8,7 @@ B007;Gula Pasir Curah 1kg;13000.0;150
 B008;Tepung Terigu Segitiga Biru 1kg;12000.0;120
 B009;Tepung Terigu Kunci Biru 1kg;11500.0;100
 B010;Telur Ayam Negeri 1kg;28000.0;10
-B011;Garam Dapur Refina 500g;5000.0;148
+B011;Garam Dapur Refina 500g;5000.0;137
 B012;Garam Bata Yodium;2000.0;200
 B013;Susu Kental Manis Frisian Flag;11000.0;100
 B014;Susu Kental Manis Indomilk;10500.0;95
@@ -96,4 +96,4 @@ B095;Baterai ABC Alkaline AA isi 2;12000.0;50
 B096;Baterai ABC Alkaline AAA isi 2;12000.0;50
 B097;Lampu LED Philips 10W;45000.0;30
 B098;Lampu LED Hannochs 10W;35000.0;30
-B099;Korek Api Tokai Gas;2500.0;86
+B099;Korek Api Tokai Gas;2500.0;80

@@ -87,7 +87,7 @@ public class CashierMenu {
         // Panggil lewat variabel cartCode
         ArrayList<CartItem> cart = cartCode.getKeranjangByKode(kodeKeranjang);
         if (cart == null) {
-            System.out.println("❌ Kode keranjang tidak ditemukan!");
+            System.out.println("Kode keranjang tidak ditemukan!");
             return;
         }
 
@@ -108,7 +108,7 @@ public class CashierMenu {
 
             // Hapus keranjang setelah lunas
             cartCode.hapusKeranjang(kodeKeranjang);
-            System.out.println("✅ Kode keranjang telah dihapus dari sistem.");
+            System.out.println("Kode keranjang telah dihapus dari sistem.");
         } else {
             System.out.println("Pembayaran dibatalkan.");
         }

@@ -58,7 +58,7 @@ public class PaymentMenu {
                     if (!cart.isEmpty()) {
                         prosesCheckout();
                     } else {
-                        System.out.println("⚠️  Keranjang Anda kosong!");
+                        System.out.println("Keranjang Anda kosong!");
                     }
                     break;
                 case 3:
@@ -119,11 +119,11 @@ public class PaymentMenu {
 
         // Cek saldo
         double saldo = memberBalance.lihatSaldo(username);
-        System.out.printf("💰 Saldo Anda      : Rp %.0f\n", saldo);
+        System.out.printf("Saldo Anda      : Rp %.0f\n", saldo);
 
         if (saldo < total) {
-            System.out.printf("\n❌ Saldo tidak cukup!\n");
-            System.out.printf("   Kurang: Rp %.0f\n", total - saldo);
+            System.out.printf("\nSaldo tidak cukup!\n");
+            System.out.printf("Kurang: Rp %.0f\n", total - saldo);
             return;
         }
 
@@ -132,14 +132,14 @@ public class PaymentMenu {
         String konfirmasi = input.nextLine().toLowerCase();
 
         if (!konfirmasi.equals("y")) {
-            System.out.println("❌ Pembayaran dibatalkan!");
+            System.out.println("Pembayaran dibatalkan!");
             return;
         }
 
         // Kurangi saldo
         boolean bayarBerhasil = memberBalance.bayarDariSaldo(username, total);
         if (!bayarBerhasil) {
-            System.out.println("❌ Pembayaran gagal!");
+            System.out.println("Pembayaran gagal!");
             return;
         }
 
@@ -168,8 +168,8 @@ public class PaymentMenu {
         // Update stok di gudang
         updateStokGudang();
 
-        System.out.println("✅ Transaksi berhasil diproses!");
-        System.out.printf("✓ Saldo baru Anda: Rp %.0f\n", memberBalance.lihatSaldo(username));
+        System.out.println("Transaksi berhasil diproses!");
+        System.out.printf("Saldo baru Anda: Rp %.0f\n", memberBalance.lihatSaldo(username));
         System.out.println("Keranjang dikosongkan...");
         cart.clear();
     }
@@ -183,7 +183,7 @@ public class PaymentMenu {
     }
 
     private void updateStokGudang() {
-        System.out.println("\n📦 Mengupdate stok barang di gudang...");
+        System.out.println("\nMengupdate stok barang di gudang...");
         for (CartItem item : cart) {
             // Ambil barang dari gudang
             ArrayList<Barang> semuaBarang = gudang.getSemuaBarang();
@@ -191,10 +191,10 @@ public class PaymentMenu {
                 if (barang.getIdBarang().equalsIgnoreCase(item.getIdBarang())) {
                     int stokBaru = barang.getStok() - item.getJumlah();
                     if (stokBaru < 0) {
-                        System.out.println("⚠️  Stok " + barang.getNama() + " tidak cukup untuk diupdate!");
+                        System.out.println("Stok " + barang.getNama() + " tidak cukup untuk diupdate!");
                     } else {
                         gudang.updateStok(item.getIdBarang(), stokBaru);
-                        System.out.println("✓ Stok " + barang.getNama() + " diupdate (sisa: " + stokBaru + ")");
+                        System.out.println("Stok " + barang.getNama() + " diupdate (sisa: " + stokBaru + ")");
                     }
                     break;
                 }
