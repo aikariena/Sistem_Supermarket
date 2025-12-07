@@ -1,3 +1,7 @@
 Biden;1234;082263888;kasir;false
 admin;admin123;0812345678;admin;true
+<<<<<<< Updated upstream
 kemal;-;0812345678;pengguna;false
+=======
+Rumi;-;0812345678;pengguna;false
+>>>>>>> Stashed changes
