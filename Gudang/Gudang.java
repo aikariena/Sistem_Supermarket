@@ -135,5 +135,15 @@ public class Gudang {
         return new ArrayList<>(daftarBarang);
     }
 
+    public Barang getBarangById(String idBarang) {
+        for (Barang b : daftarBarang) {
+            if (b.getIdBarang().equalsIgnoreCase(idBarang)) {
+                return b;
+            }
+        }
+        return null; // jika tidak ditemukan
+    }
+
+
 }
 

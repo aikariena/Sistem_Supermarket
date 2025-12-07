@@ -61,7 +61,7 @@ B060;Nugget Fiesta 500g;45000.0;20
 B061;Nugget Champ 500g;38000.0;25
 B062;Sosis So Nice Sapi 10s;18000.0;30
 B063;Sosis Kimbo Sapi 12s;25000.0;25
-B064;Bakso Sapi Sumber Selera;30000.0;20
+B064;Bakso Sapi Sumber Selera;30000.0;18
 B065;Deterjen Rinso Anti Noda 800g;22000.0;60
 B066;Deterjen Attack Jazz 1 800g;19000.0;55
 B067;Deterjen Daia Bunga 850g;16000.0;60

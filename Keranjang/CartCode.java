@@ -139,7 +139,7 @@ public class CartCode {
 
         int no = 1;
         for (CartItem item : items) {
-            System.out.printf("%-5d %-10s %-30s Rp%-8d %-10d Rp%.0f\n",
+            System.out.printf("%-5d %-10s %-30s Rp%-10.0f %-10d Rp%-10.0f\n",
                 no++, item.getIdBarang(), item.getNama(),
                 item.getHarga(), item.getJumlah(), item.getSubtotal());
             total += item.getSubtotal();
