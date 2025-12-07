@@ -2,6 +2,8 @@ package Login;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import Gudang.Barang;
 import Gudang.Gudang;
 import Keranjang.CartItem;
 import Keranjang.CartCode;
@@ -88,18 +90,7 @@ public class UserMenu {
                     gudang.cariBarang(keyword);
                     break;
                 case 3:
-                    System.out.print("ID Barang: ");
-                    String idBarang = input.nextLine();
-                    System.out.print("Nama barang: ");
-                    String nama = input.nextLine();
-                    System.out.print("Harga barang (Rp): ");
-                    int harga = input.nextInt();
-                    System.out.print("Jumlah: ");
-                    int jumlah = input.nextInt();
-                    input.nextLine();
-
-                    cart.add(new CartItem(idBarang, nama, harga, jumlah));
-                    System.out.println("✅ Barang '" + nama + "' ditambahkan ke keranjang!");
+                    tambahKeranjang();
                     break;
                 case 4:
                     return;
@@ -108,6 +99,54 @@ public class UserMenu {
             }
         } while (pilih != 4);
     }
+
+    // ===================== PERBAIKAN TAMBAH KERANJANG ======================
+    private void tambahKeranjang() {
+        System.out.print("Masukkan ID Barang: ");
+        String id = input.nextLine().toUpperCase();
+
+        // Ambil data dari gudang
+        Barang data = gudang.getBarangById(id);
+        if (data == null) {
+            System.out.println("❌ ID barang tidak ditemukan!");
+            return;
+        }
+
+        String nama = data.getNama();
+        double harga = data.getHarga();
+
+        System.out.print("Jumlah: ");
+        if (!input.hasNextInt()) {
+            System.out.println("❌ Input jumlah tidak valid.");
+            input.nextLine();
+            return;
+        }
+        int jumlah = input.nextInt();
+        input.nextLine();
+
+        if (jumlah <= 0) {
+            System.out.println("❌ Jumlah harus lebih dari nol.");
+            return;
+        }
+
+        // Jika barang sudah ada di keranjang → update jumlah
+        boolean found = false;
+        for (CartItem item : cart) {
+            if (item.getIdBarang().equals(id)) {
+                item.setJumlah(item.getJumlah() + jumlah);
+                found = true;
+                break;
+            }
+        }
+
+        // Jika belum ada → tambah baru
+        if (!found) {
+            cart.add(new CartItem(id, nama, harga, jumlah));
+        }
+
+        System.out.println("✅ Barang '" + nama + "' ditambahkan ke keranjang!");
+    }
+    // ======================================================================
 
     private void lihatKeranjangSaya() {
         if (cart.isEmpty()) {
@@ -126,7 +165,7 @@ public class UserMenu {
 
         int no = 1;
         for (CartItem item : cart) {
-            System.out.printf("%-5d %-10s %-30s Rp%-8d %-10d Rp%.0f\n",
+            System.out.printf("%-5d %-10s %-30s Rp%-10.0f %-10d Rp%-10.0f\n",
                 no++, item.getIdBarang(), item.getNama(),
                 item.getHarga(), item.getJumlah(), item.getSubtotal());
             total += item.getSubtotal();
@@ -176,7 +215,6 @@ public class UserMenu {
         System.out.println("║        BUAT KODE KERANJANG");
         System.out.println("╚════════════════════════════════════════════════╝");
 
-        // Tampilkan isi keranjang
         double total = 0;
         System.out.printf("%-5s %-10s %-30s %-10s %-10s %-12s\n",
             "No", "ID", "Nama", "Harga", "Jumlah", "Subtotal");
@@ -184,7 +222,7 @@ public class UserMenu {
 
         int no = 1;
         for (CartItem item : cart) {
-            System.out.printf("%-5d %-10s %-30s Rp%-8d %-10d Rp%.0f\n",
+            System.out.printf("%-5d %-10s %-30s Rp%-8f %-10d Rp%f\n",
                 no++, item.getIdBarang(), item.getNama(),
                 item.getHarga(), item.getJumlah(), item.getSubtotal());
             total += item.getSubtotal();
@@ -202,7 +240,6 @@ public class UserMenu {
             System.out.println("📝 Kode Anda: " + kode);
             System.out.println("   Berikan kode ini kepada kasir untuk diproses.");
             System.out.println("   Keranjang Anda akan dikosongkan.");
-
             cart.clear();
         } else {
             System.out.println("Pembatalan pembuatan kode keranjang.");

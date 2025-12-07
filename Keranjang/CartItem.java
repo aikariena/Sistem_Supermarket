@@ -3,10 +3,10 @@ package Keranjang;
 public class CartItem {
     private String idBarang;
     private String nama;
-    private int harga;
+    private double harga;
     private int jumlah;
 
-    public CartItem(String idBarang, String nama, int harga, int jumlah) {
+    public CartItem(String idBarang, String nama, double harga, int jumlah) {
         this.idBarang = idBarang;
         this.nama = nama;
         this.harga = harga;
@@ -27,7 +27,7 @@ public class CartItem {
         return nama;
     }
 
-    public int getHarga() {
+    public double getHarga() {
         return harga;
     }
 

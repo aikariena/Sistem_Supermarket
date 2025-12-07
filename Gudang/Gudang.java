@@ -121,7 +121,8 @@ public class Gudang {
         for (Barang b : daftarBarang) {
             if (b.getIdBarang().equalsIgnoreCase(keyword) || b.getNama().toLowerCase().contains(keyword.toLowerCase())) {
                 String status = (b.getStok() > 0) ? "Tersedia" : "Habis";
-                System.out.println("- [" + b.getIdBarang() + "] " + b.getNama() + " | Stok: " + b.getStok() + " (" + status + ")");
+                System.out.println("- [" + b.getIdBarang() + "] " + b.getNama() + " | Stok: " + b.getStok() +" | Harga: " + String.format("%.0f", b.getHarga())+ " (" + status + ")");
+
                 ditemukan = true;
             }
         }
@@ -134,4 +135,16 @@ public class Gudang {
         return new ArrayList<>(daftarBarang);
     }
 
+    public Barang getBarangById(String idBarang) {
+        for (Barang b : daftarBarang) {
+            if (b.getIdBarang().equalsIgnoreCase(idBarang)) {
+                return b;
+            }
+        }
+        return null; // jika tidak ditemukan
+    }
+
+
 }
+
+
