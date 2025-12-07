@@ -219,7 +219,7 @@ public class CartMenu {
         
         int no=1;
         for(CartItem item : cart) {
-            String hargaFormatted = String.format("Rp%,d", item.getHarga());
+            String hargaFormatted = String.format("Rp%,d", (long)item.getHarga());
             System.out.printf("%-5d %-15s %-25s %-10s %-10d\n", 
                 no++, 
                 item.getIdBarang(), 
